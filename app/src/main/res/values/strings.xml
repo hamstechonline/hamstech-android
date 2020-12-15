@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Hamstech</string>
+    <string name="navHome">Home</string>
+    <string name="navCourses">Courses</string>
+    <string name="navChat">Chat</string>
+    <string name="navContact">Contact Us</string>
+    <string name="AlreadyMember">Already a member?</string>
+    <string name="lblSignHere"><u>Sign in</u></string>
+    <string name="lblRegisterHere"><u>Register Instead</u></string>
+    <string name="lblApiKey">dsf99898398i3jofklese93</string>
+    <string name="chatURL">https://wa.me/919010100240</string>
+    <string name="overview">Hamstech’s Creative Fashion Styling course is
+highly recommended for fashion enthusiasts
+and fashion professionals who want to
+master the art of fashion styling. \n\n The course walks you through the subject of
+fashion and design and garment making to
+build a strong base on which to learn fashion
+styling in detail.</string>
+
+    <string-array name="hamburgMenuList">
+        <item>Profile</item>
+        <item>Notification</item>
+        <item>Hamstech Story</item>
+        <item>Life at Hamstech</item>
+        <item>Online Counselling</item>
+        <item>Chat with Us</item>
+        <item>Contact Us</item>
+        <item>Register</item>
+    </string-array>
+    <string-array name="hamburgSubList">
+        <item>About Us</item>
+        <item>Affiliations</item>
+        <item>Mentors</item>
+    </string-array>
+    <string name="mobileNumber">+91 9009900990</string>
+    <string name="requestReceived">Request Received!</string>
+    <string name="requestCallBack">You will receive a call from us shortly.</string>
+    <string name="facebook_app_id">219965395681656</string>
+    <string name="otpMessage">Don\u0027t Receive Your OTP? \n Send Us A Message!</string>
+
+</resources>

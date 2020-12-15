@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="right">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="10dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/txtHeaderTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Life at Hamstech"
+                    android:fontFamily="@font/robotoregular"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="ChatUs"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_chat_black"
+                    android:layout_toLeftOf="@+id/imgSearch"/>
+                <RelativeLayout
+                    android:id="@+id/searchParent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/imgSearch"
+                    android:visibility="gone"
+                    android:layout_marginRight="0dp">
+                    <include
+                        android:id="@+id/searchLayout"
+                        layout="@layout/search_layout"
+                        android:visibility="visible" />
+                </RelativeLayout>
+
+                <CheckBox
+                    android:id="@+id/imgSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:background="@drawable/ic_search_black"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toLeftOf="@+id/imgHamburg"/>
+                <ImageView
+                    android:id="@+id/imgHamburg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_black"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:onClick="sideMenu"
+                    android:padding="4dp"
+                    android:layout_marginLeft="20dp"/>
+
+            </RelativeLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="76dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:id="@+id/player_frame_layout"
+                        android:visibility="visible">
+
+                        <fragment
+                            android:id="@+id/youtubeFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:name="com.google.android.youtube.player.YouTubePlayerFragment">
+                        </fragment>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gallery"
+                        android:fontFamily="@font/robotoblack"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimary"
+                        android:padding="20dp"
+                        android:textStyle="bold"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/galleryList"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Events"
+                            android:fontFamily="@font/robotoblack"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:padding="0dp"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/eventsList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:scrollbars="none" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_more"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="5dp"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Campuses"
+                        android:fontFamily="@font/robotoblack"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:paddingLeft="20dp"
+                        android:textStyle="bold" />
+
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        android:layout_margin="20dp"/>
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </LinearLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:labelVisibilityMode="labeled"
+            android:layout_alignParentBottom="true"
+            app:itemIconTint="@drawable/nav_text_color"
+            android:theme="@style/menu_text_style"
+            app:itemBackground="@color/white"
+            app:itemTextColor="@drawable/nav_text_color"
+            android:foreground="?attr/selectableItemBackground"
+            app:menu="@menu/navigation">
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+        <ImageView
+            android:id="@+id/imgDiscover"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/nav_dicover"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:elevation="10dp"
+            android:layout_marginBottom="15dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="260dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:fitsSystemWindows="true"
+        android:layout_marginBottom="30dp">
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navSideMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/navigation_bg"
+            />
+
+    </RelativeLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

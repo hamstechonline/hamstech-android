@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="15dp"
+    app:cardCornerRadius="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp"
+    android:elevation="10dp"
+    android:id="@+id/parentCardview">
+
+    <RelativeLayout
+        android:id="@+id/linearParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp">
+
+        <CheckBox
+            android:id="@+id/imgBanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imgBanner"
+            android:layout_marginLeft="18dp"
+            android:text="CREDIT CARD"
+            android:fontFamily="@font/robotolight"
+            android:textSize="20sp"
+            android:layout_centerVertical="true"
+            />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

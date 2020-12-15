@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/navHome"
+        android:textSize="7sp"/>
+
+    <item
+        android:id="@+id/navigation_courses"
+        android:icon="@drawable/ic_courses"
+        android:title="@string/navCourses"
+        android:textSize="7sp"/>
+
+    <item
+        android:id="@+id/navigation_enrol"
+        android:icon="@mipmap/ic_launcher"
+        android:title=""
+        android:textSize="7sp"/>
+
+    <item
+        android:id="@+id/navigation_chat"
+        android:icon="@drawable/ic_chat"
+        android:title="@string/navChat"
+        android:textSize="7sp"/>
+    <item
+        android:id="@+id/navigation_contact"
+        android:icon="@drawable/ic_contact"
+        android:title="@string/navContact"
+        android:textSize="7sp"/>
+
+</menu>

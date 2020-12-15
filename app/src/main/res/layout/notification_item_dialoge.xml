@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/imgCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_cancel"
+        android:layout_gravity="end"
+        android:visibility="visible"
+        android:layout_margin="7dp"/>
+
+    <ScrollView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:background="@color/white"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Neeta Lulla"
+                android:fontFamily="@font/robotoblack"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/light_pink"
+                android:layout_marginTop="7dp"/>
+            <it.sephiroth.android.library.imagezoom.ImageViewTouch
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="7dp"
+                android:visibility="gone"
+                android:scaleType="fitXY"/>
+            <TextView
+                android:id="@+id/txtDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/gray"
+                android:ellipsize="end"
+                android:fontFamily="@font/circeregular"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

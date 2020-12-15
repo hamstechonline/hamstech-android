@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="20dp"
+    android:background="#CECECE"
+    android:padding="10dp"
+    android:id="@+id/custom_toast_layout">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/requestReceived"
+        android:layout_gravity="center_horizontal"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/robotobold"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/requestCallBack"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:fontFamily="@font/robotobold"
+        />
+
+</LinearLayout>

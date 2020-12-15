@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="20dp"
+    android:layout_margin="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/imgBanner"
+            android:layout_width="110dp"
+            android:layout_height="110dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toRightOf="@+id/imgBanner"
+            android:layout_marginLeft="10dp">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Neeta Lulla"
+                android:fontFamily="@font/robotoblack"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/light_pink"
+                android:layout_marginTop="7dp"/>
+            <TextView
+                android:id="@+id/txtDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore
+magn alquam erat
+volutpat."
+                android:textColor="@color/gray"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:fontFamily="@font/circeregular"
+                android:layout_marginTop="10dp"/>
+
+            <ImageView
+                android:id="@+id/imgMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_more"
+                android:layout_gravity="end"
+                android:layout_marginTop="15dp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

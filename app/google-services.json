@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "36179268069",
+    "firebase_url": "https://hamstech-ebaf4.firebaseio.com",
+    "project_id": "hamstech-ebaf4",
+    "storage_bucket": "hamstech-ebaf4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36179268069:android:442ac48f1882515912df0c",
+        "android_client_info": {
+          "package_name": "com.hamstech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36179268069-e4tjmim00plnucs7n41e28lqvaetmh6s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQUnNXuYfEN0Z3Dh2x4-KUfwaGP3nzpZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "36179268069-e4tjmim00plnucs7n41e28lqvaetmh6s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "36179268069-rlkb742jj7f572n00sov1gahhes4q8el.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hamstechapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36179268069:android:035e99d902a5093d12df0c",
+        "android_client_info": {
+          "package_name": "com.hamstechapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36179268069-e4tjmim00plnucs7n41e28lqvaetmh6s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQUnNXuYfEN0Z3Dh2x4-KUfwaGP3nzpZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "36179268069-e4tjmim00plnucs7n41e28lqvaetmh6s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "36179268069-rlkb742jj7f572n00sov1gahhes4q8el.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hamstechapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

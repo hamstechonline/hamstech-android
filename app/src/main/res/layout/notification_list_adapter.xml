@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    android:layout_marginBottom="10dp"
+    android:id="@+id/cardParent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:button="@null"/>
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Juilet Hooper"
+                android:textSize="20sp"
+                android:layout_toRightOf="@+id/checkbox"
+                android:layout_toLeftOf="@+id/txtTime"
+                android:textStyle="bold"
+                android:paddingLeft="10dp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/colorPrimary"/>
+
+            <TextView
+                android:id="@+id/txtTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="08:10 pm"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/txtDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Checked in at Hamstech"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

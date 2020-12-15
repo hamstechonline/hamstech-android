@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:background="@drawable/login_bg_image">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:fitsSystemWindows="true"
+            android:layout_margin="20dp"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Hello!"
+                android:fontFamily="@font/robotobold"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Login using OTP"
+                android:fontFamily="@font/robotomedium"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/txtMobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/edittext_background"
+                        android:hint="Mobile Number"
+                        android:textColorHint="@color/gray"
+                        android:padding="10dp"
+                        android:maxLength="10"
+                        android:fontFamily="@font/robotoregular"
+                        android:textColor="@color/black"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/linOtpLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="30dp"
+                android:visibility="visible">
+
+                <Button
+                    android:id="@+id/btnResend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Resend OTP"
+                    android:textAllCaps="false"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/robotobold"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/pink_background"/>
+                <TextView
+                    android:id="@+id/txtExpire"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expires in:"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="7dp"/>
+
+                <EditText
+                    android:id="@+id/txtOTP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_background"
+                    android:hint="Enter OTP"
+                    android:textColorHint="@color/gray"
+                    android:layout_marginTop="15dp"
+                    android:padding="10dp"
+                    android:maxLength="4"
+                    android:fontFamily="@font/robotoregular"
+                    android:textColor="@color/black"
+                    android:inputType="number"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnGetOtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get OTP"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:fontFamily="@font/robotobold"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/pink_background"/>
+
+            <Button
+                android:id="@+id/btnVerify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Verify"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_marginTop="30dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:fontFamily="@font/robotobold"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/pink_background"/>
+
+            <TextView
+                android:id="@+id/otpMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/otpMessage"
+                android:gravity="center_vertical"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@drawable/ic_chat_black"
+                android:textColor="@color/colorAccent"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="45dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/robotoregular"
+                    android:text="New to Hamstech? "/>
+
+                <TextView
+                    android:id="@+id/txtRegister"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/robotoregular"
+                    android:text="@string/lblRegisterHere"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/black"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_margin="10dp"
+    android:layout_height="wrap_content"
+    android:id="@+id/linearParent">
+
+    <ImageView
+        android:id="@+id/imgBanner"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@mipmap/ic_launcher"
+        android:scaleType="fitXY"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:background="@drawable/ic_eventlist_light_bg">
+        <TextView
+            android:id="@+id/txtLabel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_eventlist_bg"
+            android:fontFamily="@font/robotobold"
+            android:textSize="16sp"
+            android:padding="10dp"
+            android:text="Fashion \n Designer"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+
+</LinearLayout>
