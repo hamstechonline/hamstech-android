@@ -51,11 +51,11 @@ volutpat."
                 android:fontFamily="@font/circeregular"
                 android:layout_marginTop="10dp"/>
 
-            <ImageView
+            <CheckBox
                 android:id="@+id/imgMore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_more"
+                android:button="@drawable/ic_more"
                 android:layout_gravity="end"
                 android:layout_marginTop="15dp"/>
 

@@ -19,10 +19,12 @@ public class CareerOptionsListAdapter extends RecyclerView.Adapter<CareerOptions
 
     Context context;
     ArrayList<CourseDataModel> careerData;
+    int dataSize;
 
-    public CareerOptionsListAdapter(Context context,ArrayList<CourseDataModel> careerData){
+    public CareerOptionsListAdapter(Context context,ArrayList<CourseDataModel> careerData, int dataSize){
         this.context = context;
         this.careerData = careerData;
+        this.dataSize = dataSize;
     }
 
     @NonNull
@@ -54,12 +56,12 @@ public class CareerOptionsListAdapter extends RecyclerView.Adapter<CareerOptions
     @Override
     public int getItemCount() {
         int itemCount;
-        if (careerData.size() >= 4){
+        /*if (careerData.size() >= 4){
             itemCount = 4;
         } else {
             itemCount = careerData.size();
-        }
-        return itemCount;
+        }*/
+        return dataSize;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

@@ -21,10 +21,12 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     Context context;
     ArrayList<AffiliationDataModel> arrayEventsData;
+    int eventSize;
 
-    public EventsListAdapter(Context context, ArrayList<AffiliationDataModel> arrayEventsData){
+    public EventsListAdapter(Context context, ArrayList<AffiliationDataModel> arrayEventsData,int eventSize){
         this.context = context;
         this.arrayEventsData = arrayEventsData;
+        this.eventSize = eventSize;
     }
 
     @NonNull
@@ -55,7 +57,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return arrayEventsData.size();
+        return eventSize;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

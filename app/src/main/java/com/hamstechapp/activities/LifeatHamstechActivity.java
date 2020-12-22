@@ -73,7 +73,7 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
     BottomNavigationView bottom_navigation;
     DrawerLayout drawer;
     RecyclerView galleryList,eventsList;
-    ImageView imgDiscover;
+    ImageView imgDiscover,imgEventMore;
 
     RelativeLayout playerFrameLayout;
     YouTubePlayerFragment youtubeFragment;
@@ -118,6 +118,7 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
         eventsList = findViewById(R.id.eventsList);
         imgDiscover = findViewById(R.id.imgDiscover);
         imgSearch = findViewById(R.id.imgSearch);
+        imgEventMore = findViewById(R.id.imgEventMore);
         txtHeaderTitle = findViewById(R.id.txtHeaderTitle);
         searchParent = findViewById(R.id.searchParent);
 
@@ -171,6 +172,15 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
         });
 
         getData(this);
+        imgEventMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventsListAdapter = new EventsListAdapter(LifeatHamstechActivity.this,arrayEventsData,arrayEventsData.size());
+                eventsList.setLayoutManager(new GridLayoutManager(LifeatHamstechActivity.this, 2));
+                eventsList.addItemDecoration(new GridSpacingItemDecoration(2,20,false));
+                eventsList.setAdapter(eventsListAdapter);
+            }
+        });
 
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -401,7 +411,10 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
 
                             arrayEventsData.add(dataModel);
                         }
-                        eventsListAdapter = new EventsListAdapter(LifeatHamstechActivity.this,arrayEventsData);
+                        if (arrayEventsData.size()>4) imgEventMore.setVisibility(View.VISIBLE);
+                        else imgEventMore.setVisibility(View.GONE);
+
+                        eventsListAdapter = new EventsListAdapter(LifeatHamstechActivity.this,arrayEventsData,4);
                         eventsList.setLayoutManager(new GridLayoutManager(LifeatHamstechActivity.this, 2));
                         eventsList.addItemDecoration(new GridSpacingItemDecoration(2,20,false));
                         eventsList.setAdapter(eventsListAdapter);

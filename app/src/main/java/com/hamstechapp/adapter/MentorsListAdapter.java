@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,7 +50,7 @@ public class MentorsListAdapter extends RecyclerView.Adapter<MentorsListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         try {
             holder.txtTitle.setText(arrayData.get(position).getAffiliationTitle());
             holder.txtDescription.setText(arrayData.get(position).getAffiliationDescription());
@@ -58,14 +60,22 @@ public class MentorsListAdapter extends RecyclerView.Adapter<MentorsListAdapter.
                     //.placeholder(R.drawable.duser1)
                     .into(UIUtils.getRoundedImageTarget(context, holder.imgBanner, 20));
 
-            holder.imgMore.setOnClickListener(new View.OnClickListener() {
+            holder.imgMore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    lessonLog = arrayData.get(position).getAffiliationTitle();
-                    ActivityLog = "Clicked on mentors";
-                    PagenameLog = "Mentors page";
-                    getLogEvent(context);
-                    detailsPopup(position);
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        lessonLog = arrayData.get(position).getAffiliationTitle();
+                        ActivityLog = "Clicked on mentors";
+                        PagenameLog = "Mentors page";
+                        getLogEvent(context);
+                        holder.txtDescription.setMaxLines(50);
+                    } else {
+                        lessonLog = arrayData.get(position).getAffiliationTitle();
+                        ActivityLog = "Clicked on mentors";
+                        PagenameLog = "Mentors page";
+                        getLogEvent(context);
+                        holder.txtDescription.setMaxLines(2);
+                    }
                 }
             });
         } catch (Exception e){
@@ -79,7 +89,8 @@ public class MentorsListAdapter extends RecyclerView.Adapter<MentorsListAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView imgBanner,imgMore;
+        ImageView imgBanner;
+        CheckBox imgMore;
         TextView txtTitle,txtDescription;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

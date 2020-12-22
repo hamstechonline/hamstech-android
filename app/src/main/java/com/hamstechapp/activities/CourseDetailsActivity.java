@@ -67,7 +67,8 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
     ImageView imgCourseBanner,imgDiscover;
     Button btnEnroll;
     HocLoadingDialog hocLoadingDialog;
-    TextView txtHeaderTitle,txtOverviewText,txtDuration,imgReadMore;
+    TextView txtHeaderTitle,txtOverviewText,txtDuration;
+    CheckBox imgReadMore;
     CurriculumListAdapter curriculumListAdapter;
     RecyclerView curriculumList;
     ArrayList<CourseDataModel> curriculumData = new ArrayList<>();
@@ -132,10 +133,14 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
                 }
             }
         });
-        imgReadMore.setOnClickListener(new View.OnClickListener() {
+        imgReadMore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                detailsPopup(overviewText);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    txtOverviewText.setMaxLines(50);
+                } else {
+                    txtOverviewText.setMaxLines(4);
+                }
             }
         });
         btnEnroll.setOnClickListener(new View.OnClickListener() {

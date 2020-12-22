@@ -80,7 +80,8 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
     CareerOptionsListAdapter careerOptionsListAdapter;
     CareerOptionsPopupListAdapter careerOptionsPopupListAdapter;
     ImageView imgDiscover,placementImage;
-    TextView txtCategoryName,txtHeaderTitle,imgReadMore;
+    TextView txtCategoryName,txtHeaderTitle;
+    CheckBox imgReadMore;
 
     NavigationFragment navigationFragment;
     BottomNavigationView bottomNavigation;
@@ -176,10 +177,18 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
                 }
             }
         });
-        imgReadMore.setOnClickListener(new View.OnClickListener() {
+        imgReadMore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                detailsPopup(careerData);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    careerOptionsListAdapter = new CareerOptionsListAdapter(CoursesActivity.this,careerData,careerData.size());
+                    careerOptionsList.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.VERTICAL, false));
+                    careerOptionsList.setAdapter(careerOptionsListAdapter);
+                } else {
+                    careerOptionsListAdapter = new CareerOptionsListAdapter(CoursesActivity.this,careerData,4);
+                    careerOptionsList.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.VERTICAL, false));
+                    careerOptionsList.setAdapter(careerOptionsListAdapter);
+                }
             }
         });
     }
@@ -333,8 +342,10 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
                         txtCategoryName.setText("Programmes in "+UserDataConstants.categoryName);
 
                         mp4URL = jo.getString("course_video");
+                        if (careerData.size()>4) imgReadMore.setVisibility(View.VISIBLE);
+                        else imgReadMore.setVisibility(View.GONE);
 
-                        careerOptionsListAdapter = new CareerOptionsListAdapter(CoursesActivity.this,careerData);
+                        careerOptionsListAdapter = new CareerOptionsListAdapter(CoursesActivity.this,careerData,4);
                         careerOptionsList.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.VERTICAL, false));
                         careerOptionsList.setAdapter(careerOptionsListAdapter);
 

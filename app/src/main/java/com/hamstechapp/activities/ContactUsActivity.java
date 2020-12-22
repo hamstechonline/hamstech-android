@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hamstechapp.R;
@@ -94,6 +96,10 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
     TextView txtHeaderTitle;
     RelativeLayout searchParent;
     SearchFragment searchFragment;
+    double branchLats[] = {17.409634,17.436826,17.438766,17.450836,17.490768,17.442345,17.370879};
+    double branchLongs[] = {78.485407,78.453033,78.409774,78.489081,78.389206,78.369605,78.543669};
+    String[] branchNames = {"HIMAYATNAGAR","Punjagutta","Jubilee Hills","Secunderabad","Kukatpally","Gachibowli","Kothapet"};
+    double lat,lng;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,7 +127,7 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
 
         mSupportMapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-
+        mSupportMapFragment.getMapAsync(this);
         bottom_navigation.setOnNavigationItemSelectedListener(this);
         bottom_navigation.getMenu().findItem(R.id.navigation_contact).setChecked(true);
 
@@ -267,7 +273,7 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
         startActivity(myIntent);
     }
 
-    @Override
+   /* @Override
     public void onMapReady(GoogleMap googleMap) {
         Map = googleMap;
         LatLng sydney = new LatLng(UserDataConstants.resultLat, UserDataConstants.resultLong);
@@ -286,7 +292,28 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
                 startActivity(intent);
             }
         });
-    }
+    }*/
+   @Override
+   public void onMapReady(GoogleMap googleMap) {
+
+       MarkerOptions markerOptions;
+       Marker marker;
+       for(int i=0;i<branchLats.length;i++){
+           lat = branchLats[i];
+           lng = branchLongs[i];
+           Log.e("latlong","155  "+lat);
+           LatLng sydney = new LatLng(lat,lng);
+           markerOptions = new MarkerOptions()
+                   .position(sydney)
+                   .title(branchNames[i]);
+           markerOptions.visible(true);
+           marker = googleMap.addMarker(markerOptions);
+           marker.showInfoWindow();
+           marker.setVisible(true);
+           CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(10).build();
+           googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+       }
+   }
 
     public void getRequestCall(Context context){
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -393,13 +420,15 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
             return;
         } else {
             try {
+
+                getNearestBranch.start();
+                txtNearestBranch.setText(UserDataConstants.branchName);
+
                 provider = locationManager.getBestProvider(criteria, true);
                 location = locationManager.getLastKnownLocation(provider);
                 UserDataConstants.getLatitude = location.getLatitude();
                 UserDataConstants.getLongitude = location.getLongitude();
-                getNearestBranch.start();
                 mSupportMapFragment.getMapAsync(this);
-                txtNearestBranch.setText(UserDataConstants.branchName);
 
             } catch (Exception e) {
                 e.printStackTrace();
