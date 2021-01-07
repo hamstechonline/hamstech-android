@@ -40,10 +40,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hamstechapp.R;
 import com.hamstechapp.adapter.CareerOptionsListAdapter;
 import com.hamstechapp.adapter.CareerOptionsPopupListAdapter;
+import com.hamstechapp.adapter.CourseHighlightsAdapter;
 import com.hamstechapp.adapter.CoursesListAdapter;
 import com.hamstechapp.adapter.PlacementsHomeListAdapter;
 import com.hamstechapp.adapter.SliderCardPagerAdapter;
@@ -57,6 +59,7 @@ import com.hamstechapp.fragment.NavigationFragment;
 import com.hamstechapp.fragment.SearchFragment;
 import com.hamstechapp.utils.Constants;
 import com.hamstechapp.utils.GridSpacingItemDecoration;
+import com.hamstechapp.utils.UIUtils;
 import com.hamstechapp.utils.UserDataConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
@@ -74,13 +77,14 @@ import java.util.TimerTask;
 
 public class CoursesActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    RecyclerView courseList,whyHamstechList,careerOptionsList,placementsList;
+    RecyclerView courseList,whyHamstechList,careerOptionsList,placementsList,listCourseHighlights;
     CoursesListAdapter coursesListAdapter;
+    CourseHighlightsAdapter courseHighlightsAdapter;
     WhyHamstechHomeListAdapter whyHamstechHomeListAdapter;
     CareerOptionsListAdapter careerOptionsListAdapter;
     CareerOptionsPopupListAdapter careerOptionsPopupListAdapter;
-    ImageView imgDiscover,placementImage;
-    TextView txtCategoryName,txtHeaderTitle;
+    ImageView imgDiscover,placementImage,imgMentor;
+    TextView txtCategoryName,txtHeaderTitle,mentorDescription,txtMentorName;
     CheckBox imgReadMore;
 
     NavigationFragment navigationFragment;
@@ -99,6 +103,7 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
     ArrayList<AffiliationDataModel> hamstechData = new ArrayList<>();
     ArrayList<CourseDataModel> careerData = new ArrayList<>();
     ArrayList<CourseDataModel> courseData = new ArrayList<>();
+    ArrayList<CourseDataModel> courseHighlights = new ArrayList<>();
     ArrayList<HomePageDatamodel> testimonialsData = new ArrayList<>();
     Handler handler;
     Runnable update;
@@ -135,7 +140,11 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
         imgSearch = findViewById(R.id.imgSearch);
         searchParent = findViewById(R.id.searchParent);
         imgReadMore = findViewById(R.id.imgReadMore);
+        imgMentor = findViewById(R.id.imgMentor);
         youTubePlayerView = findViewById(R.id.youtube_player_view);
+        listCourseHighlights = findViewById(R.id.listCourseHighlights);
+        mentorDescription = findViewById(R.id.mentorDescription);
+        txtMentorName = findViewById(R.id.txtMentorName);
 
         bottomNavigation.setOnNavigationItemSelectedListener(this);
         bottomNavigation.getMenu().findItem(R.id.navigation_courses).setChecked(true);
@@ -181,10 +190,12 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
+                    imgReadMore.setText("read less");
                     careerOptionsListAdapter = new CareerOptionsListAdapter(CoursesActivity.this,careerData,careerData.size());
                     careerOptionsList.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.VERTICAL, false));
                     careerOptionsList.setAdapter(careerOptionsListAdapter);
                 } else {
+                    imgReadMore.setText("read more");
                     careerOptionsListAdapter = new CareerOptionsListAdapter(CoursesActivity.this,careerData,4);
                     careerOptionsList.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.VERTICAL, false));
                     careerOptionsList.setAdapter(careerOptionsListAdapter);
@@ -291,6 +302,7 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
                         testimonialsData.clear();
                         hamstechData.clear();
                         placementsDataDown.clear();
+                        courseHighlights.clear();
                         JSONArray jsonArray = jo.getJSONArray("career_options");
                         for (int i = 0; i<jsonArray.length(); i++){
                             JSONObject dataObject = jsonArray.getJSONObject(i);
@@ -331,6 +343,14 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
                             testimonialsModel.setTestimonialImage(testimonialsObject.getString("add_image"));
                             testimonialsData.add(testimonialsModel);
                         }
+                        JSONArray arrayHighlights = jo.getJSONArray("highlights_list");
+                        for (int g = 0; g<arrayHighlights.length(); g++) {
+                            JSONObject objectHighlight = arrayHighlights.getJSONObject(g);
+                            CourseDataModel courseDataModel = new CourseDataModel();
+                            courseDataModel.setCourseHighlightId(objectHighlight.getString("highlight_id"));
+                            courseDataModel.setCourseHighlight(objectHighlight.getString("highlight"));
+                            courseHighlights.add(courseDataModel);
+                        }
                         JSONArray hamstechArray = jo.getJSONArray("why_hamstech");
                         for (int h = 0; h<hamstechArray.length(); h++){
                             JSONObject hamstechObject = hamstechArray.getJSONObject(h);
@@ -353,18 +373,30 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
                         courseList.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.VERTICAL, false));
                         courseList.setAdapter(coursesListAdapter);
 
-                        placementsHomeListAdapter =new PlacementsHomeListAdapter(CoursesActivity.this,placementsData,placementsDataDown);
+                        /*placementsHomeListAdapter =new PlacementsHomeListAdapter(CoursesActivity.this,placementsData,placementsDataDown);
                         placementsList.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                        placementsList.setAdapter(placementsHomeListAdapter);
+                        placementsList.setAdapter(placementsHomeListAdapter);*/
 
-                        mCardAdapter = new SliderCardPagerAdapter(CoursesActivity.this,testimonialsData);
+                        /*mCardAdapter = new SliderCardPagerAdapter(CoursesActivity.this,testimonialsData);
                         mViewPager.setAdapter(mCardAdapter);
-                        mViewPager.setOffscreenPageLimit(3);
+                        mViewPager.setOffscreenPageLimit(3);*/
+                        courseHighlightsAdapter = new CourseHighlightsAdapter(CoursesActivity.this,courseHighlights);
+                        listCourseHighlights.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.VERTICAL, false));
+                        listCourseHighlights.setAdapter(courseHighlightsAdapter);
 
                         whyHamstechHomeListAdapter = new WhyHamstechHomeListAdapter(CoursesActivity.this,hamstechData);
                         whyHamstechList.setLayoutManager(new GridLayoutManager(CoursesActivity.this, 2));
                         whyHamstechList.addItemDecoration(new GridSpacingItemDecoration(2,0,false));
                         whyHamstechList.setAdapter(whyHamstechHomeListAdapter);
+
+                        Glide.with(CoursesActivity.this)
+                                .asBitmap()
+                                .load(jo.getJSONArray("mentors_list").getJSONObject(0).getString("mentor_image"))
+                                //.placeholder(R.drawable.duser1)
+                                .into(UIUtils.getRoundedImageTarget(CoursesActivity.this, imgMentor, 20));
+                        mentorDescription.setText(jo.getJSONArray("mentors_list").getJSONObject(0).getString("mentorss_description"));
+                        txtMentorName.setText(jo.getJSONArray("mentors_list").getJSONObject(0).getString("mentors_title"));
+
                         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
                             @Override
                             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
@@ -395,24 +427,6 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
                         } else {
                             imgReadMore.setVisibility(View.GONE);
                         }
-
-                        update = new Runnable() {
-                            public void run() {
-                                if (mCardAdapter.getCount() == currentPage) {
-                                    currentPage = 0;
-                                }
-                                mViewPager.setCurrentItem(currentPage++, true);
-                            }
-                        };
-
-                        timer.schedule(new TimerTask() {
-
-                            @Override
-                            public void run()
-                            {
-                                handler.post(update);
-                            }
-                        }, 1000, 3000);
 
                         hocLoadingDialog.hideDialog();
                     } else {

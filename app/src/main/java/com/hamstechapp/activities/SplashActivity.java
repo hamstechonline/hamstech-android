@@ -200,7 +200,6 @@ public class SplashActivity extends AppCompatActivity {
             data.put("lesson",gcm_id);
             data.put("activity","New User");
             data.put("pagename","GCM Id");
-            Log.e("Data","149  "+data.toString());
             logEventsActivity.LogEventsActivity(context,data);
             startActivity(new Intent(SplashActivity.this,OnBoardingActivity.class));
         } catch (JSONException e) {

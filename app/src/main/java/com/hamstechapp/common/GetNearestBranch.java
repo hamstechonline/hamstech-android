@@ -37,7 +37,7 @@ public class GetNearestBranch {
             "Kukatpally Hyderabad – 72 India \n" +
             "PHONE:+91-04023155963 EMAIL: info@hamstech.com","Gachibowli - 4th Floor, Vamsiram builders, Jyothi Imperial\n" +
             "Above South India Mall,\n" +
-            "Gachibowli main road, Gachibowli\n" +
+            "Gachibowli Main Road, Gachibowli\n" +
             "Hyderabad – 32 India\n" +
             "PHONE:+91-7207599222\n" +
             "EMAIL: info@hamstech.com","Kothapet - 4th Floor, Above More Mega Store,\n" +

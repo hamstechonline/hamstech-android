@@ -58,4 +58,24 @@ public class CourseDataModel {
     }
 
     String catId;
+
+    public String getCourseHighlight() {
+        return courseHighlight;
+    }
+
+    public void setCourseHighlight(String courseHighlight) {
+        this.courseHighlight = courseHighlight;
+    }
+
+    String courseHighlight;
+
+    public String getCourseHighlightId() {
+        return courseHighlightId;
+    }
+
+    public void setCourseHighlightId(String courseHighlightId) {
+        this.courseHighlightId = courseHighlightId;
+    }
+
+    String courseHighlightId;
 }

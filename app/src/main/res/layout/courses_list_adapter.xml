@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Fashion Design"
         android:textSize="18sp"
-        android:textColor="@color/gray"
+        android:textColor="@color/colorPrimary"
         android:fontFamily="@font/robotomedium"
         android:layout_toRightOf="@+id/imgBanner"
         android:layout_marginLeft="15dp"/>

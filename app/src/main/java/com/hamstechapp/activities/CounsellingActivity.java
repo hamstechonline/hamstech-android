@@ -68,6 +68,7 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
     RecyclerView counsellingList;
     LinearLayout videoLayout;
     ImageView imgCancel,imgDiscover;
+    Button btnOnline, btnOnCampus;
     CounsellingListAdapter counsellingListAdapter;
     CheckBox imgSearch;
     TextView txtHeaderTitle;
@@ -105,6 +106,8 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
         imgSearch = findViewById(R.id.imgSearch);
         txtHeaderTitle = findViewById(R.id.txtHeaderTitle);
         searchParent = findViewById(R.id.searchParent);
+        btnOnline = findViewById(R.id.btnOnline);
+        btnOnCampus = findViewById(R.id.btnOnCampus);
 
         bottom_navigation.setOnNavigationItemSelectedListener(this);
         bottom_navigation.getMenu().findItem(R.id.navigation_enrol).setChecked(true);
@@ -170,6 +173,23 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
                     txtHeaderTitle.setVisibility(View.VISIBLE);
                     searchParent.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        btnOnline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counsellingListAdapter = new CounsellingListAdapter(CounsellingActivity.this,counsellingData);
+                counsellingList.setLayoutManager(new LinearLayoutManager(CounsellingActivity.this, LinearLayoutManager.VERTICAL, false));
+                counsellingList.setAdapter(counsellingListAdapter);
+            }
+        });
+        btnOnCampus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counsellingListAdapter = new CounsellingListAdapter(CounsellingActivity.this,counsellingData);
+                counsellingList.setLayoutManager(new LinearLayoutManager(CounsellingActivity.this, LinearLayoutManager.VERTICAL, true));
+                counsellingList.setAdapter(counsellingListAdapter);
             }
         });
 

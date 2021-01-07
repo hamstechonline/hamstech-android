@@ -28,14 +28,80 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginBottom="76dp">
-
-                    <ImageView
-                        android:id="@+id/imgCourseBanner"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        android:paddingTop="0dp"
-                        android:layout_marginTop="-20dp"
-                        android:scaleType="fitXY"/>
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imgCourseBanner"
+                            android:layout_width="match_parent"
+                            android:layout_height="220dp"
+                            android:paddingTop="0dp"
+                            android:layout_marginTop="-20dp"
+                            android:scaleType="fitXY"/>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:padding="10dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/txtHeaderTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:fontFamily="@font/robotoregular"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:layout_marginRight="27dp"
+                                android:layout_toLeftOf="@+id/searchParent"
+                                android:textStyle="bold"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:onClick="ChatUs"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/ic_chat_white"
+                                android:layout_toLeftOf="@+id/imgSearch"/>
+                            <RelativeLayout
+                                android:id="@+id/searchParent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_toLeftOf="@+id/imgSearch"
+                                android:visibility="gone"
+                                android:layout_marginRight="0dp">
+                                <include
+                                    android:id="@+id/searchLayout"
+                                    layout="@layout/search_layout"
+                                    android:visibility="visible" />
+                            </RelativeLayout>
+
+                            <CheckBox
+                                android:id="@+id/imgSearch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:button="@null"
+                                android:background="@drawable/ic_search_white"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="20dp"
+                                android:layout_toLeftOf="@+id/imgHamburg"/>
+                            <ImageView
+                                android:id="@+id/imgHamburg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_menu_white"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:onClick="sideMenu"
+                                android:padding="4dp"
+                                android:layout_marginLeft="20dp"/>
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -83,11 +149,60 @@
                                 android:id="@+id/imgReadMore"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="read more"
-                                android:button="@null"
+                                android:gravity="center"
+                                android:button="@drawable/ic_more"
                                 android:layout_gravity="right"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginRight="10dp"/>
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="20dp"
+                        app:cardCornerRadius="30dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="15dp">
+
+                            <TextView
+                                android:id="@+id/txtAwardName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Awarding Body: JNAFAU"
+                                android:fontFamily="@font/robotobold"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="22sp"
+                                android:textStyle="bold"/>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@color/light_pink"
+                                android:visibility="gone"/>
+
+                            <TextView
+                                android:id="@+id/txtAwardDiscription"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/robotoregular"
+                                android:textSize="14sp"
+                                android:maxLines="4"
+                                android:ellipsize="end"
+                                android:text="Lorem Ipsum Lorem Ipsum Lorem Ipsum
+Lorem Ipsum Lorem Ipsum Lorem Ipsum"
+                                android:textColor="@color/gray"
+                                android:visibility="gone"/>
 
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
@@ -160,13 +275,68 @@
 
                     </androidx.cardview.widget.CardView>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@android:color/transparent"
+                        android:visibility="gone">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Head of Department"
+                            android:fontFamily="@font/robotobold"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="10dp">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginRight="15dp"
+                                android:src="@mipmap/ic_launcher"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Name Surname"
+                                    android:textSize="20sp"
+                                    android:fontFamily="@font/robotobold"
+                                    android:textColor="@color/black"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/robotoregular"
+                                    android:text="Lorem ipsum Lorem ipsum
+Lorem ipsum Lorem ipsum
+"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginBottom="20dp"
-                        android:layout_marginTop="0dp"
+                        android:layout_marginTop="20dp"
                         app:cardCornerRadius="30dp">
 
                         <LinearLayout
@@ -187,7 +357,39 @@
                                 android:drawablePadding="30dp"
                                 android:fontFamily="@font/robotolight"
                                 android:drawableLeft="@drawable/ic_chat_courses"
-                                />
+                                android:gravity="center_vertical"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="0dp"
+                        app:cardCornerRadius="30dp">
+
+                        <LinearLayout
+                            android:id="@+id/layoutRegister"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="15dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Register Now!"
+                                android:maxLines="3"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20sp"
+                                android:drawablePadding="30dp"
+                                android:fontFamily="@font/robotolight"
+                                android:drawableLeft="@drawable/ic_register_courses"
+                                android:gravity="center_vertical"/>
 
                         </LinearLayout>
 
@@ -206,72 +408,12 @@
                         android:textColor="@color/white"
                         android:fontFamily="@font/robotobold"
                         android:layout_gravity="center_horizontal"
+                        android:visibility="gone"
                         android:background="@drawable/pink_background"/>
 
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:padding="10dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/txtHeaderTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:fontFamily="@font/robotoregular"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:layout_marginRight="27dp"
-                    android:layout_toLeftOf="@+id/searchParent"
-                    android:textStyle="bold"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="ChatUs"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_chat_white"
-                    android:layout_toLeftOf="@+id/imgSearch"/>
-                <RelativeLayout
-                    android:id="@+id/searchParent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/imgSearch"
-                    android:visibility="gone"
-                    android:layout_marginRight="0dp">
-                    <include
-                        android:id="@+id/searchLayout"
-                        layout="@layout/search_layout"
-                        android:visibility="visible" />
-                </RelativeLayout>
-
-                <CheckBox
-                    android:id="@+id/imgSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:button="@null"
-                    android:background="@drawable/ic_search_white"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toLeftOf="@+id/imgHamburg"/>
-                <ImageView
-                    android:id="@+id/imgHamburg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_white"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:onClick="sideMenu"
-                    android:padding="4dp"
-                    android:layout_marginLeft="20dp"/>
-
-            </RelativeLayout>
 
         </RelativeLayout>
 

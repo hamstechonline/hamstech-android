@@ -73,7 +73,7 @@ public class RegistrationActivity extends AppCompatActivity {
     Button btnGetOtp,btnResend,btnVerify;
     MaterialTextView txtExpire,txtLogin;
     TextView otpMessage;
-    EditText txtName,txtMobile,txtOTP;
+    EditText txtName,txtMobile,txtOTP,txtEmail;
     CountDownTimer countDownTimer;
     private LocationManager locationManager;
     Criteria criteria;
@@ -106,6 +106,7 @@ public class RegistrationActivity extends AppCompatActivity {
         txtExpire = findViewById(R.id.txtExpire);
         txtLogin = findViewById(R.id.txtLogin);
         otpMessage = findViewById(R.id.otpMessage);
+        txtEmail = findViewById(R.id.txtEmail);
 
         linOtpLayout.setVisibility(View.GONE);
         btnVerify.setVisibility(View.GONE);
@@ -377,6 +378,7 @@ public class RegistrationActivity extends AppCompatActivity {
             jsonObject.put("name", txtName.getText().toString().trim());
             jsonObject.put("phone", resMobile);
             jsonObject.put("cityName", cityName);
+            jsonObject.put("email", txtEmail.getText().toString().trim());
             jsonObject.put("user_address", getAddress);
             jsonObject.put("user_state", getState);
             jsonObject.put("user_pincode", getPincode);

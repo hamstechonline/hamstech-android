@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -51,6 +52,7 @@ import com.hamstechapp.adapter.AffiliationSliderCardPagerAdapter;
 import com.hamstechapp.adapter.BannerSliderCardPagerAdapter;
 import com.hamstechapp.adapter.HomeCoursesListAdapter;
 import com.hamstechapp.adapter.MentorHomeListAdapter;
+import com.hamstechapp.adapter.PlacementsHomeListAdapter;
 import com.hamstechapp.adapter.PlacementsSliderCardPagerAdapter;
 import com.hamstechapp.adapter.SliderCardPagerAdapter;
 import com.hamstechapp.adapter.WhyHamstechHomeListAdapter;
@@ -90,11 +92,11 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 View.OnClickListener{
 
     BottomNavigationView bottom_navigation;
-    ImageView imgPrevious,imgNext,affiliationPrevious,affiliationNext,placementImage,imgDiscover,
-            placementPrevious,placementNext;
+    ImageView imgPrevious,imgNext,affiliationPrevious,affiliationNext,placementImage,imgDiscover;
     RelativeLayout searchParent;
     CheckBox imgSearch;
     View view;
+    Button btnChat;
     TextView txtHeaderTitle,txtVideoContent,txtMentorContent,txtPlacementsContent,txtAffiliationContent,txtTestimonialsContent;
     NavigationFragment navigationFragment;
     NestedScrollView scrollParent;
@@ -108,7 +110,7 @@ View.OnClickListener{
     SliderCardPagerAdapter mCardAdapter;
     BannerSliderCardPagerAdapter bannerCardAdapter;
     AffiliationSliderCardPagerAdapter affiliationCardAdapter;
-    PlacementsSliderCardPagerAdapter placementsCardAdapter;
+    PlacementsHomeListAdapter placementsHomeListAdapter;
     int currentPage,currentPageBanner,affiliationCurrentPage,placementsCurrentPage;
     CircleIndicator indicator,affilicationcircle,placementcircle;
     Handler handler,handlerBanner,affiliationHandler,placementsHandler;
@@ -174,10 +176,7 @@ View.OnClickListener{
         txtTestimonialsContent = findViewById(R.id.txtTestimonialsContent);
         youTubePlayerView = findViewById(R.id.youtube_player_view);
         scrollParent = findViewById(R.id.scrollParent);
-        placementSlider = findViewById(R.id.placementSlider);
-        placementcircle = findViewById(R.id.placementcircle);
-        placementPrevious = findViewById(R.id.placementPrevious);
-        placementNext = findViewById(R.id.placementNext);
+        btnChat = findViewById(R.id.btnChat);
 
         bottom_navigation.setOnNavigationItemSelectedListener(this);
         bottom_navigation.getMenu().findItem(R.id.navigation_home).setChecked(true);
@@ -202,8 +201,6 @@ View.OnClickListener{
 
         imgPrevious.setOnClickListener(this);
         imgNext.setOnClickListener(this);
-        placementNext.setOnClickListener(this);
-        placementPrevious.setOnClickListener(this);
         linearParent.setVisibility(View.GONE);
 
         imgDiscover.setOnClickListener(new View.OnClickListener() {
@@ -252,6 +249,14 @@ View.OnClickListener{
                 } else {
                     affiliationSlider.setCurrentItem(affiliationCurrentPage++, true);
                 }
+            }
+        });
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW);
+                myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
+                startActivity(myIntent);
             }
         });
 
@@ -410,22 +415,6 @@ View.OnClickListener{
                     sliderView.setCurrentItem(currentPageBanner++, true);
                 }
                 break;
-            case R.id.placementPrevious:
-                if (placementsCurrentPage == 0){
-                    placementsCurrentPage = placementsData.size();
-                    placementSlider.setCurrentItem(placementsCurrentPage--, true);
-                } else {
-                    placementSlider.setCurrentItem(placementsCurrentPage--, true);
-                }
-                break;
-            case R.id.placementNext:
-                if (placementsData.size() == placementsCurrentPage) {
-                    placementsCurrentPage = 0;
-                    placementSlider.setCurrentItem(placementsCurrentPage++, true);
-                } else {
-                    placementSlider.setCurrentItem(placementsCurrentPage++, true);
-                }
-                break;
         }
     }
 
@@ -546,9 +535,9 @@ View.OnClickListener{
                     whyHamstechList.addItemDecoration(new GridSpacingItemDecoration(2,0,false));
                     whyHamstechList.setAdapter(whyHamstechHomeListAdapter);
 
-                    placementsCardAdapter = new PlacementsSliderCardPagerAdapter(HomeActivity.this,placementsData);
-                    placementSlider.setAdapter(placementsCardAdapter);
-                    placementcircle.setViewPager(placementSlider);
+                    placementsHomeListAdapter =new PlacementsHomeListAdapter(HomeActivity.this,placementsData,placementsData);
+                    placementsList.setLayoutManager(new LinearLayoutManager(HomeActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    placementsList.setAdapter(placementsHomeListAdapter);
 
                     mCardAdapter = new SliderCardPagerAdapter(HomeActivity.this,testimonialsData);
                     mViewPager.setAdapter(mCardAdapter);
@@ -608,23 +597,7 @@ View.OnClickListener{
                         public void run() {
                             affiliationHandler.post(affiliationUpdate);
                         }
-                    }, 2000, 3000);
-                    placementsRunnable = new Runnable() {
-                        public void run() {
-                            if (placementsCardAdapter.getCount() == placementsCurrentPage) {
-                                placementsCurrentPage = 0;
-                            }
-                            placementSlider.setCurrentItem(placementsCurrentPage++, true);
-                        }
-                    };
-
-                    placementsTimer.schedule(new TimerTask() {
-
-                        @Override
-                        public void run() {
-                            placementsHandler.post(placementsRunnable);
-                        }
-                    }, 2000, 3000);
+                    }, 2000, 5000);
 
                     updateBanner = new Runnable() {
                         public void run() {
@@ -641,7 +614,7 @@ View.OnClickListener{
                         public void run() {
                             handlerBanner.post(updateBanner);
                         }
-                    }, 2000, 3000);
+                    }, 2000, 5000);
 
                     update = new Runnable() {
                         public void run() {
@@ -658,7 +631,7 @@ View.OnClickListener{
                         public void run() {
                             handler.post(update);
                         }
-                    }, 1000, 3000);
+                    }, 1000, 5000);
                     linearParent.setVisibility(View.VISIBLE);
                     hocLoadingDialog.hideDialog();
                 } catch(Exception e) {

@@ -4,11 +4,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
-        android:background="@drawable/login_bg_image">
+        android:background="@drawable/login_bg_image"
+        android:focusable="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,9 +22,9 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Welcome!"
+                android:layout_marginTop="50dp"
                 android:fontFamily="@font/robotobold"
+                android:text="Welcome!"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 android:textStyle="bold" />
@@ -32,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Register to Start Your Creative Career!"
+                android:text="Register to Start Your Career!"
                 android:fontFamily="@font/robotomedium"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
@@ -74,6 +75,21 @@
                         android:maxLength="10"
                         android:textColor="@color/black"
                         android:inputType="number"/>
+
+                    <EditText
+                        android:id="@+id/txtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/edittext_background"
+                        android:hint="Email"
+                        android:fontFamily="@font/robotoregular"
+                        android:layout_toRightOf="@+id/ccp"
+                        android:textColorHint="@color/gray"
+                        android:padding="10dp"
+                        android:maxLength="50"
+                        android:textColor="@color/black"
+                        android:inputType="textEmailAddress"
+                        android:layout_marginTop="15dp"/>
 
                 </LinearLayout>
 
@@ -195,8 +211,13 @@
                     />
 
             </LinearLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="-40dp"
+                android:src="@drawable/bottomregistatiomimg" />
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

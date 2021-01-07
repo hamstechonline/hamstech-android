@@ -157,23 +157,48 @@
                         android:layout_height="wrap_content"
                         android:scrollbars="none"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Online Learning"
-                        android:fontFamily="@font/robotoblack"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:paddingLeft="10dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="6dp"
-                        android:textStyle="bold"/>
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/ic_qnshome"
+                            android:layout_gravity="center_horizontal"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Not sure which course to take?"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="17sp"
+                            android:fontFamily="@font/robotoblack"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_horizontal"/>
+
+                        <Button
+                            android:id="@+id/btnChat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/pink_background"
+                            android:text="CHAT WITH US NOW"
+                            android:fontFamily="@font/robotobold"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="5dp"/>
+
+                </LinearLayout>
 
                     <TextView
                         android:id="@+id/txtVideoContent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Now you can learn our courses from home with our  online classes"
+                        android:text="Watch how we’ve been inspiring the youth to choose creative fields of study and build a successful career for 28 years"
                         android:textSize="14sp"
                         android:fontFamily="@font/robotoregular"
                         android:textColor="@color/black"
@@ -260,44 +285,13 @@ mentors."
                         android:layout_height="200dp"
                         android:visibility="gone"/>
 
-                    <RelativeLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/placementsList"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp">
-
-                        <androidx.viewpager.widget.ViewPager
-                            android:id="@+id/placementSlider"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:clipToPadding="false"
-                            android:overScrollMode="never"
-                            />
-
-                        <me.relex.circleindicator.CircleIndicator
-                            android:id="@+id/placementcircle"
-                            android:layout_width="match_parent"
-                            android:layout_height="17dp"
-                            android:gravity="center"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginBottom="20dp"/>
-
-                        <ImageView
-                            android:id="@+id/placementPrevious"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/ic_previous"
-                            android:layout_margin="20dp"/>
-
-                        <ImageView
-                            android:id="@+id/placementNext"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/ic_next"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="20dp"/>
-
-                    </RelativeLayout>
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:scrollbars="none"
+                        android:visibility="visible"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -347,7 +341,7 @@ universities."
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/ic_previous"
+                            android:src="@drawable/ic_previous_black"
                             android:layout_margin="20dp"/>
 
                         <ImageView
@@ -355,7 +349,7 @@ universities."
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/ic_next"
+                            android:src="@drawable/ic_next_black"
                             android:layout_alignParentRight="true"
                             android:layout_margin="20dp"/>
 
@@ -390,9 +384,9 @@ with us."
                         android:layout_height="230dp"
                         android:clipToPadding="false"
                         android:overScrollMode="never"
-                        android:paddingEnd="50dp"
-                        android:paddingLeft="50dp"
-                        android:paddingRight="50dp"
+                        android:paddingEnd="0dp"
+                        android:paddingLeft="0dp"
+                        android:paddingRight="0dp"
                         android:paddingStart="30dp"
                         />
 

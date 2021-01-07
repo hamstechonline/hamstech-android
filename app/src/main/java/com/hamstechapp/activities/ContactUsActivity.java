@@ -450,7 +450,7 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
             data.put("lesson",lessonLog);
             data.put("activity",ActivityLog);
             data.put("pagename",PagenameLog);
-            boolean logevent = logEventsActivity.LogEventsActivity(context,data);
+            logEventsActivity.LogEventsActivity(context,data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
