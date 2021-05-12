@@ -84,7 +84,6 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
     LogEventsActivity logEventsActivity;
     HocLoadingDialog hocLoadingDialog;
     ArrayList<CounsellingDataModel> counsellingData = new ArrayList<>();
-    ArrayList<CounsellingDataModel> onCampusData = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
