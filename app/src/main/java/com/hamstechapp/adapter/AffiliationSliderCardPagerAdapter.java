@@ -1,6 +1,7 @@
 package com.hamstechapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.hamstechapp.R;
+import com.hamstechapp.activities.AffiliationsActivity;
 import com.hamstechapp.datamodel.HomePageDatamodel;
 
 import java.util.ArrayList;
@@ -64,6 +66,13 @@ public class AffiliationSliderCardPagerAdapter extends PagerAdapter {
                 .load(affiliationData.get(position).getAffiliationImage())
                 //.placeholder(R.drawable.duser1)
                 .into(image);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AffiliationsActivity.class);
+                context.startActivity(intent);
+            }
+        });
 
     }
 

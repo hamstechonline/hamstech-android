@@ -2,6 +2,7 @@ package com.hamstechapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +51,7 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.hamstechapp.R;
 import com.hamstechapp.adapter.EventsListAdapter;
 import com.hamstechapp.adapter.GalleryListAdapter;
+import com.hamstechapp.common.CounsellingPopup;
 import com.hamstechapp.common.DeveloperKey;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
@@ -89,12 +92,14 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
     String[] branchNames = {"HIMAYATNAGAR","Punjagutta","Jubilee Hills","Secunderabad","Kukatpally","Gachibowli","Kothapet"};
     double lat,lng;
     HocLoadingDialog hocLoadingDialog;
+    CounsellingPopup counsellingPopup;
     String mp4URL;
     ArrayList<AffiliationDataModel> arrayEventsData = new ArrayList<>();
     ArrayList<AffiliationDataModel> arrayGalleryData = new ArrayList<>();
     TextView txtHeaderTitle;
     CheckBox imgSearch;
-    RelativeLayout searchParent;
+    RelativeLayout searchParent,headerLayout;
+    LinearLayout mailContent;
     SearchFragment searchFragment;
     String ActivityLog,PagenameLog,lessonLog,CourseLog;
     LogEventsActivity logEventsActivity;
@@ -121,6 +126,8 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
         imgEventMore = findViewById(R.id.imgEventMore);
         txtHeaderTitle = findViewById(R.id.txtHeaderTitle);
         searchParent = findViewById(R.id.searchParent);
+        headerLayout = findViewById(R.id.headerLayout);
+        mailContent = findViewById(R.id.mailContent);
 
         bottom_navigation.setOnNavigationItemSelectedListener(this);
         bottom_navigation.getMenu().findItem(R.id.navigation_enrol).setChecked(true);
@@ -143,13 +150,17 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
 
         playerFrameLayout.setVisibility(View.VISIBLE);
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
 
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(LifeatHamstechActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                PagenameLog = "Counselling";
+                ActivityLog = "LifeatHamstech Page";
+                getLogEvent(LifeatHamstechActivity.this);
+                Intent intentAbout = new Intent(LifeatHamstechActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
 
@@ -157,6 +168,9 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    PagenameLog = "Search";
+                    ActivityLog = "LifeatHamstech Page";
+                    getLogEvent(LifeatHamstechActivity.this);
                     txtHeaderTitle.setVisibility(View.GONE);
                     searchParent.setVisibility(View.VISIBLE);
                     searchFragment = SearchFragment.newInstance();
@@ -203,6 +217,22 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
 
             }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfiguration) {
+        super.onConfigurationChanged(newConfiguration);
+        if (newConfiguration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            headerLayout.setVisibility(View.GONE);
+            mailContent.setVisibility(View.GONE);
+            bottom_navigation.setVisibility(View.GONE);
+            imgDiscover.setVisibility(View.GONE);
+        } else {
+            headerLayout.setVisibility(View.VISIBLE);
+            mailContent.setVisibility(View.VISIBLE);
+            bottom_navigation.setVisibility(View.VISIBLE);
+            imgDiscover.setVisibility(View.VISIBLE);
+        }
     }
 
     public void sideMenu(View view){
@@ -278,10 +308,16 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
+                PagenameLog = "Home page";
+                ActivityLog = "LifeatHamstech Page";
+                getLogEvent(LifeatHamstechActivity.this);
                 Intent intentHome = new Intent(LifeatHamstechActivity.this, HomeActivity.class);
                 startActivity(intentHome);
                 return true;
             case R.id.navigation_courses:
+                PagenameLog = "Course page";
+                ActivityLog = "LifeatHamstech Page";
+                getLogEvent(LifeatHamstechActivity.this);
                 Intent intentCourses = new Intent(this, HomeActivity.class);
                 intentCourses.putExtra("isCoursePage","Course");
                 startActivity(intentCourses);
@@ -290,11 +326,17 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
 
                 return true;
             case R.id.navigation_chat:
+                PagenameLog = "Chat with us";
+                ActivityLog = "LifeatHamstech Page";
+                getLogEvent(LifeatHamstechActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 return true;
             case R.id.navigation_contact:
+                PagenameLog = "Contact us";
+                ActivityLog = "LifeatHamstech Page";
+                getLogEvent(LifeatHamstechActivity.this);
                 Intent contactIntent = new Intent(this, ContactUsActivity.class);
                 startActivity(contactIntent);
                 return true;
@@ -408,6 +450,7 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
                             AffiliationDataModel dataModel = new AffiliationDataModel();
                             dataModel.setAffiliationImage(jsonArray.getJSONObject(i).getString("add_image"));
                             dataModel.setAffiliationTitle(jsonArray.getJSONObject(i).getString("add_title"));
+                            dataModel.setEvent_id(jsonArray.getJSONObject(i).getString("id"));
 
                             arrayEventsData.add(dataModel);
                         }
@@ -475,7 +518,7 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
             data.put("lesson","");
             data.put("activity",ActivityLog);
             data.put("pagename",PagenameLog);
-            boolean logevent = logEventsActivity.LogEventsActivity(context,data);
+            logEventsActivity.LogEventsActivity(context,data);
         } catch (JSONException e) {
             e.printStackTrace();
         }

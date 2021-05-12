@@ -56,6 +56,7 @@ import com.hamstechapp.adapter.PlacementsHomeListAdapter;
 import com.hamstechapp.adapter.PlacementsSliderCardPagerAdapter;
 import com.hamstechapp.adapter.SliderCardPagerAdapter;
 import com.hamstechapp.adapter.WhyHamstechHomeListAdapter;
+import com.hamstechapp.common.CounsellingPopup;
 import com.hamstechapp.common.GetNearestBranch;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
@@ -65,6 +66,7 @@ import com.hamstechapp.fragment.NavigationFragment;
 import com.hamstechapp.fragment.SearchFragment;
 import com.hamstechapp.utils.Constants;
 import com.hamstechapp.utils.GridSpacingItemDecoration;
+import com.hamstechapp.utils.SocialMediaEventsHelper;
 import com.hamstechapp.utils.UserDataConstants;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -92,7 +94,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 View.OnClickListener{
 
     BottomNavigationView bottom_navigation;
-    ImageView imgPrevious,imgNext,affiliationPrevious,affiliationNext,placementImage,imgDiscover;
+    ImageView imgPrevious,imgNext,affiliationPrevious,affiliationNext,placementImage,imgDiscover,placementsPrevious,placementsNext;
     RelativeLayout searchParent;
     CheckBox imgSearch;
     View view;
@@ -103,7 +105,7 @@ View.OnClickListener{
     DrawerLayout drawer;
     LinearLayout linearParent;
     ViewPager mViewPager,sliderView,affiliationSlider,placementSlider;
-    RecyclerView courseList,mentorsList,whyHamstechList,placementsList;
+    RecyclerView courseList,mentorsList,whyHamstechList;
     HomeCoursesListAdapter homeCoursesListAdapter;
     MentorHomeListAdapter mentorHomeListAdapter;
     WhyHamstechHomeListAdapter whyHamstechHomeListAdapter;
@@ -111,6 +113,7 @@ View.OnClickListener{
     BannerSliderCardPagerAdapter bannerCardAdapter;
     AffiliationSliderCardPagerAdapter affiliationCardAdapter;
     PlacementsHomeListAdapter placementsHomeListAdapter;
+    PlacementsSliderCardPagerAdapter placementsSliderCardPagerAdapter;
     int currentPage,currentPageBanner,affiliationCurrentPage,placementsCurrentPage;
     CircleIndicator indicator,affilicationcircle,placementcircle;
     Handler handler,handlerBanner,affiliationHandler,placementsHandler;
@@ -132,6 +135,7 @@ View.OnClickListener{
     LogEventsActivity logEventsActivity;
     String CourseLog,ActivityLog,PagenameLog;
     HocLoadingDialog hocLoadingDialog;
+    CounsellingPopup counsellingPopup;
     YouTubePlayerView youTubePlayerView;
     YouTubePlayer player;
 
@@ -157,8 +161,9 @@ View.OnClickListener{
         courseList = findViewById(R.id.courseList);
         mentorsList = findViewById(R.id.mentorsList);
         whyHamstechList = findViewById(R.id.whyHamstechList);
-        placementsList = findViewById(R.id.placementsList);
+        //placementsList = findViewById(R.id.placementsList);
         affiliationSlider = findViewById(R.id.affiliationSlider);
+        placementSlider = findViewById(R.id.placementSlider);
         affiliationPrevious = findViewById(R.id.affiliationPrevious);
         affiliationNext = findViewById(R.id.affiliationNext);
         affilicationcircle = findViewById(R.id.affilicationcircle);
@@ -177,6 +182,9 @@ View.OnClickListener{
         youTubePlayerView = findViewById(R.id.youtube_player_view);
         scrollParent = findViewById(R.id.scrollParent);
         btnChat = findViewById(R.id.btnChat);
+        placementsPrevious = findViewById(R.id.placementsPrevious);
+        placementsNext = findViewById(R.id.placementsNext);
+        placementcircle = findViewById(R.id.placementcircle);
 
         bottom_navigation.setOnNavigationItemSelectedListener(this);
         bottom_navigation.getMenu().findItem(R.id.navigation_home).setChecked(true);
@@ -198,22 +206,28 @@ View.OnClickListener{
 
         logEventsActivity = new LogEventsActivity();
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
 
         imgPrevious.setOnClickListener(this);
         imgNext.setOnClickListener(this);
         linearParent.setVisibility(View.GONE);
+        ActivityLog = "Home page";
 
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(HomeActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                Intent intentAbout = new Intent(HomeActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
         imgSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    CourseLog = "";
+                    PagenameLog = "Search";
+                    ActivityLog = "Home Page";
+                    getLogEvent(HomeActivity.this);
                     txtHeaderTitle.setVisibility(View.GONE);
                     searchParent.setVisibility(View.VISIBLE);
                     searchFragment = SearchFragment.newInstance();
@@ -251,9 +265,34 @@ View.OnClickListener{
                 }
             }
         });
+        placementsPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (placementsCurrentPage == 0){
+                    placementsCurrentPage = placementsData.size();
+                    placementSlider.setCurrentItem(placementsCurrentPage--, true);
+                } else {
+                    placementSlider.setCurrentItem(placementsCurrentPage--, true);
+                }
+            }
+        });
+        placementsNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (placementsData.size() == placementsCurrentPage) {
+                    placementsCurrentPage = 0;
+                    placementSlider.setCurrentItem(placementsCurrentPage++, true);
+                } else {
+                    placementSlider.setCurrentItem(placementsCurrentPage++, true);
+                }
+            }
+        });
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CourseLog = "";
+                PagenameLog = "Chat with us";
+                getLogEvent(HomeActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
@@ -351,11 +390,20 @@ View.OnClickListener{
             case R.id.navigation_enrol:
                 break;
             case R.id.navigation_chat:
+                CourseLog = "";
+                PagenameLog = "chat with us";
+                ActivityLog = "Home Page";
+                getLogEvent(HomeActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 break;
             case R.id.navigation_contact:
+                CourseLog = "";
+                PagenameLog = "Contact us";
+                ActivityLog = "Home Page";
+                getLogEvent(HomeActivity.this);
+                new SocialMediaEventsHelper(this).EventContact();
                 Intent contactIntent = new Intent(this, ContactUsActivity.class);
                 startActivity(contactIntent);
                 break;
@@ -535,9 +583,9 @@ View.OnClickListener{
                     whyHamstechList.addItemDecoration(new GridSpacingItemDecoration(2,0,false));
                     whyHamstechList.setAdapter(whyHamstechHomeListAdapter);
 
-                    placementsHomeListAdapter =new PlacementsHomeListAdapter(HomeActivity.this,placementsData,placementsData);
+                    /*placementsHomeListAdapter =new PlacementsHomeListAdapter(HomeActivity.this,placementsData,placementsData);
                     placementsList.setLayoutManager(new LinearLayoutManager(HomeActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                    placementsList.setAdapter(placementsHomeListAdapter);
+                    placementsList.setAdapter(placementsHomeListAdapter);*/
 
                     mCardAdapter = new SliderCardPagerAdapter(HomeActivity.this,testimonialsData);
                     mViewPager.setAdapter(mCardAdapter);
@@ -549,6 +597,11 @@ View.OnClickListener{
                     affiliationCardAdapter = new AffiliationSliderCardPagerAdapter(HomeActivity.this,affiliationData);
                     affiliationSlider.setAdapter(affiliationCardAdapter);
                     affilicationcircle.setViewPager(affiliationSlider);
+
+                    placementsSliderCardPagerAdapter = new PlacementsSliderCardPagerAdapter(HomeActivity.this,placementsData);
+                    placementSlider.setAdapter(placementsSliderCardPagerAdapter);
+                    placementcircle.setViewPager(placementSlider);
+
                     if (getIntent().getStringExtra("isCoursePage")!=null) {
                         scrollParent.scrollTo(0,320);
                         bottom_navigation.setOnNavigationItemSelectedListener(HomeActivity.this);
@@ -566,7 +619,7 @@ View.OnClickListener{
                         public void onStateChange(YouTubePlayer youTubePlayer, PlayerConstants.PlayerState state) {
                             super.onStateChange(youTubePlayer, state);
                             CourseLog = "";
-                            ActivityLog = "How to use app";
+                            ActivityLog = "Home page";
                             if (state.toString().equals("PLAYING")){
                                 PagenameLog = "Video start";
                                 getLogEvent(HomeActivity.this);
@@ -582,6 +635,23 @@ View.OnClickListener{
                     });
                     getNearestBranch = new GetNearestBranch(HomeActivity.this);
                     takeLocationPermission();
+                    placementsRunnable = new Runnable() {
+                        public void run() {
+                            if (placementsSliderCardPagerAdapter.getCount() == placementsCurrentPage) {
+                                placementsCurrentPage = 0;
+                            }
+                            placementSlider.setCurrentItem(placementsCurrentPage++, true);
+                        }
+                    };
+
+                    placementsTimer.schedule(new TimerTask() {
+
+                        @Override
+                        public void run() {
+                            placementsHandler.post(placementsRunnable);
+                        }
+                    }, 2000, 5000);
+
                     affiliationUpdate = new Runnable() {
                         public void run() {
                             if (affiliationCardAdapter.getCount() == affiliationCurrentPage) {

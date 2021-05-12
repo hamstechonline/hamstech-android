@@ -69,7 +69,7 @@ public class BannerSliderCardPagerAdapter extends PagerAdapter {
                 .load(sliderData.get(position).getSliderImage())
                 //.placeholder(R.drawable.duser1)
                 .into(image);
-        image.setOnClickListener(new View.OnClickListener() {
+        /*image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityLog = "Clicked on courses";
@@ -79,7 +79,7 @@ public class BannerSliderCardPagerAdapter extends PagerAdapter {
                 UserDataConstants.categoryName = sliderData.get(position).getCatName();
                 getLogEvent(context);
             }
-        });
+        });*/
     }
 
     public void getLogEvent(Context context){

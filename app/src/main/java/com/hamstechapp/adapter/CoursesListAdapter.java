@@ -13,8 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hamstechapp.R;
 import com.hamstechapp.activities.CourseDetailsActivity;
+import com.hamstechapp.activities.CoursesActivity;
+import com.hamstechapp.common.LogEventsActivity;
 import com.hamstechapp.datamodel.CourseDataModel;
 import com.hamstechapp.utils.UserDataConstants;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -22,9 +27,12 @@ public class CoursesListAdapter extends RecyclerView.Adapter<CoursesListAdapter.
 
     Context context;
     ArrayList<CourseDataModel> courseData;
+    LogEventsActivity logEventsActivity;
+    String ActivityLog,PagenameLog,lessonLog,CourseLog;
     public CoursesListAdapter(Context context,ArrayList<CourseDataModel> courseData){
         this.context = context;
         this.courseData = courseData;
+        logEventsActivity = new LogEventsActivity();
     }
 
     @NonNull
@@ -44,6 +52,9 @@ public class CoursesListAdapter extends RecyclerView.Adapter<CoursesListAdapter.
             holder.linearParent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    CourseLog = courseData.get(position).getCourseName();
+                    ActivityLog = "Course Page";
+                    getLogEvent(context);
                     UserDataConstants.courseId = courseData.get(position).getCourseId();
                     UserDataConstants.courseName = courseData.get(position).getCourseName();
                     Intent detailsIntent = new Intent(context, CourseDetailsActivity.class);
@@ -67,6 +78,24 @@ public class CoursesListAdapter extends RecyclerView.Adapter<CoursesListAdapter.
             super(itemView);
             linearParent = itemView.findViewById(R.id.linearParent);
             txtTitle = itemView.findViewById(R.id.txtTitle);
+        }
+    }
+    public void getLogEvent(Context context){
+        JSONObject data = new JSONObject();
+        try {
+            data.put("apikey",context.getResources().getString(R.string.lblApiKey));
+            data.put("appname","Dashboard");
+            data.put("mobile", UserDataConstants.userMobile);
+            data.put("fullname",UserDataConstants.userName);
+            data.put("email",UserDataConstants.userMail);
+            data.put("category",UserDataConstants.categoryName);
+            data.put("course",CourseLog);
+            data.put("lesson","");
+            data.put("activity",ActivityLog);
+            data.put("pagename","");
+            logEventsActivity.LogEventsActivity(context,data);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

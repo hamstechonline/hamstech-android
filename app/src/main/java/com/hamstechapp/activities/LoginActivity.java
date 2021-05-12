@@ -128,13 +128,13 @@ public class LoginActivity extends AppCompatActivity {
             txtMobile.setText(getIntent().getStringExtra("getMobile"));
             postGetOtp(LoginActivity.this);
         }
-        countDownTimer = new CountDownTimer(120000, 1000) {
+        countDownTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 txtExpire.setVisibility(View.VISIBLE);
                 long min = ((millisUntilFinished / 60000) % 60);
                 long sec = ((millisUntilFinished / 1000) % 60);
-                txtExpire.setText("OTP Expires in: " + String.format("%02d", min) + ":" + String.format("%02d", sec) + " Minutes");
+                txtExpire.setText("OTP Expires in " + String.format("%02d", sec) + " Seconds");
             }
 
             @Override

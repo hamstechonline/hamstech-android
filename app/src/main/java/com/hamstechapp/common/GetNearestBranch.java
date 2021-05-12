@@ -25,22 +25,18 @@ public class GetNearestBranch {
             "PHONE:+91-40-66684994, +91-40-66684995\n" +
             "EMAIL: info@hamstech.com","Jubilee Hills - Plot No 472, 2nd Floor," +
             " SAI Galleria,Above Nissan Showroom,\n" +
-            "Road No 36, Jubilee Hills,\n" +
-            "Hyderabad – 500033 India\n" +
-            "PHONE:+91-7207057291\n" +
+            "Road No 36, Jubilee Hills,\n" + "Hyderabad – 500033 India\n" + "PHONE:+91-7207057291\n" +
             "EMAIL: info@hamstech.com","Secunderabad - II Floor," +
             " Jade Arcade, Paradise ‘X’ Road,\n" +
             "M.G. Road, Secunderabad – 03 India\n" +
             "PHONE:+91-40-66484997, +91-40-66484998\n" +
             "EMAIL: info@hamstech.com","Kukatpally - 3rd and 4th floor, above Neerus, \n" +
-            "Forum Mall circle JNTU road, \n" +
-            "Kukatpally Hyderabad – 72 India \n" +
-            "PHONE:+91-04023155963 EMAIL: info@hamstech.com","Gachibowli - 4th Floor, Vamsiram builders, Jyothi Imperial\n" +
-            "Above South India Mall,\n" +
-            "Gachibowli Main Road, Gachibowli\n" +
-            "Hyderabad – 32 India\n" +
-            "PHONE:+91-7207599222\n" +
-            "EMAIL: info@hamstech.com","Kothapet - 4th Floor, Above More Mega Store,\n" +
+            "Forum Mall circle JNTU road, \n" + "Kukatpally Hyderabad – 72 India \n" +
+            "PHONE:+91-04023155963 EMAIL: info@hamstech.com",
+            "Gachibowli - 4th Floor, Vamsiram builders, Jyothi Imperial\n" + "Above South India Mall,\n" +
+            "Gachibowli Main Road, Gachibowli\n" + "Hyderabad – 32 India\n" +
+            "PHONE:+91-7207599222\n" + "EMAIL: info@hamstech.com",
+            "Kothapet - 4th Floor, Above More Mega Store,\n" +
             "Beside Astalakshmi Temple Arch,\n" +
             "Kothapet.\n" +
             "Hyderabad – 35 India\n" +
@@ -67,7 +63,7 @@ public class GetNearestBranch {
         LatLng from = new LatLng(UserDataConstants.getLatitude,UserDataConstants.getLongitude);
         LatLng to = new LatLng(branchLats[position],branchLongs[position]);
         Double resultDes = SphericalUtil.computeDistanceBetween(from, to);
-        resultDes = (resultDes/1000);
+        resultDes = (resultDes/100);
         Log.i("resultDes", "" + resultDes);
         return resultDes;
     }

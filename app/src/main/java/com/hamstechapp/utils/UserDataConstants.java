@@ -19,6 +19,9 @@ public class UserDataConstants {
     public static double getLongitude;
     public static String branchName;
     public static String courseName;
+    public static String EventHeaderTitle;
+    public static String EventId;
+    public static int counsellingPopup;
     public static double resultLat;
     public static double resultLong;
 }

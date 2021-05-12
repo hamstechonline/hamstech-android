@@ -31,6 +31,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -46,12 +48,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hamstechapp.R;
+import com.hamstechapp.adapter.BranchListAdapter;
+import com.hamstechapp.common.CounsellingPopup;
 import com.hamstechapp.common.GetNearestBranch;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
@@ -76,11 +81,13 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
 
     NavigationFragment navigationFragment;
     BottomNavigationView bottom_navigation;
+    RecyclerView branchList;
     DrawerLayout drawer;
     ImageView imgDiscover;
     GetNearestBranch getNearestBranch;
     TextView txtNearestBranch,txtMobileNumber;
     HocLoadingDialog hocLoadingDialog;
+    CounsellingPopup counsellingPopup;
     UserDataConstants userDataConstants;
     LinearLayout requestCallBack;
     String ActivityLog,PagenameLog,lessonLog,CourseLog;
@@ -100,6 +107,7 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
     double branchLongs[] = {78.485407,78.453033,78.409774,78.489081,78.389206,78.369605,78.543669};
     String[] branchNames = {"HIMAYATNAGAR","Punjagutta","Jubilee Hills","Secunderabad","Kukatpally","Gachibowli","Kothapet"};
     double lat,lng;
+    BranchListAdapter branchListAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,6 +132,7 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
         imgSearch = findViewById(R.id.imgSearch);
         txtHeaderTitle = findViewById(R.id.txtHeaderTitle);
         searchParent = findViewById(R.id.searchParent);
+        branchList = findViewById(R.id.branchList);
 
         mSupportMapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -139,9 +148,10 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
 
         txtMobileNumber.setText(R.string.mobileNumber);
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
         userDataConstants = new UserDataConstants();
         logEventsActivity = new LogEventsActivity();
-
+        lessonLog = "";
         getNearestBranch = new GetNearestBranch(this);
         takeLocationPermission();
 
@@ -179,8 +189,8 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(ContactUsActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                Intent intentAbout = new Intent(ContactUsActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
         imgSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -200,6 +210,10 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
                 }
             }
         });
+
+        branchListAdapter = new BranchListAdapter(ContactUsActivity.this,branchLats);
+        branchList.setLayoutManager(new LinearLayoutManager(ContactUsActivity.this, LinearLayoutManager.VERTICAL, false));
+        branchList.setAdapter(branchListAdapter);
 
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -237,6 +251,9 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
                 startActivity(intentHome);
                 return true;
             case R.id.navigation_courses:
+                PagenameLog = "Contact us";
+                ActivityLog = "Contact Us Page";
+                getLogEvent(ContactUsActivity.this);
                 Intent intentCourses = new Intent(this, HomeActivity.class);
                 intentCourses.putExtra("isCoursePage","Course");
                 startActivity(intentCourses);
@@ -245,12 +262,14 @@ public class ContactUsActivity extends AppCompatActivity implements BottomNaviga
 
                 return true;
             case R.id.navigation_chat:
+                PagenameLog = "Chat with us";
+                ActivityLog = "Contact Us Page";
+                getLogEvent(ContactUsActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 return true;
             case R.id.navigation_contact:
-
                 return true;
         }
 

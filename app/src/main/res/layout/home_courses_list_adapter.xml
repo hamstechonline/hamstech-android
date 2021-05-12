@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:padding="10dp"
-    android:layout_marginTop="2dp">
+    android:layout_marginTop="2dp"
+    android:id="@+id/parentLayout">
 
     <ImageView
         android:id="@+id/imgBanner"

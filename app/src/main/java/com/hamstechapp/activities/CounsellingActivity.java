@@ -50,6 +50,7 @@ import com.hamstechapp.datamodel.CounsellingDataModel;
 import com.hamstechapp.fragment.NavigationFragment;
 import com.hamstechapp.fragment.SearchFragment;
 import com.hamstechapp.utils.Constants;
+import com.hamstechapp.utils.SocialMediaEventsHelper;
 import com.hamstechapp.utils.UIUtils;
 import com.hamstechapp.utils.UserDataConstants;
 
@@ -79,10 +80,11 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
     private YouTubePlayer player;
     private StringBuilder logString;
     private MyPlaybackEventListener playbackEventListener;
-    String mp4URL,lessonLog,ActivityLog,PagenameLog,CourseLog;
+    String mp4URL,courseName,lessonLog,ActivityLog,PagenameLog,CourseLog;
     LogEventsActivity logEventsActivity;
     HocLoadingDialog hocLoadingDialog;
     ArrayList<CounsellingDataModel> counsellingData = new ArrayList<>();
+    ArrayList<CounsellingDataModel> onCampusData = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -176,23 +178,6 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
             }
         });
 
-        btnOnline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                counsellingListAdapter = new CounsellingListAdapter(CounsellingActivity.this,counsellingData);
-                counsellingList.setLayoutManager(new LinearLayoutManager(CounsellingActivity.this, LinearLayoutManager.VERTICAL, false));
-                counsellingList.setAdapter(counsellingListAdapter);
-            }
-        });
-        btnOnCampus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                counsellingListAdapter = new CounsellingListAdapter(CounsellingActivity.this,counsellingData);
-                counsellingList.setLayoutManager(new LinearLayoutManager(CounsellingActivity.this, LinearLayoutManager.VERTICAL, true));
-                counsellingList.setAdapter(counsellingListAdapter);
-            }
-        });
-
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -231,10 +216,20 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
+                courseName = "";
+                lessonLog = "";
+                PagenameLog = "Home page";
+                ActivityLog = "Counselling Page";
+                getLogEvent(CounsellingActivity.this);
                 Intent intentHome = new Intent(CounsellingActivity.this, HomeActivity.class);
                 startActivity(intentHome);
                 return true;
             case R.id.navigation_courses:
+                courseName = "";
+                lessonLog = "";
+                PagenameLog = "Course us";
+                ActivityLog = "Counselling Page";
+                getLogEvent(CounsellingActivity.this);
                 Intent intentCourses = new Intent(this, HomeActivity.class);
                 intentCourses.putExtra("isCoursePage","Course");
                 startActivity(intentCourses);
@@ -243,11 +238,21 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
 
                 return true;
             case R.id.navigation_chat:
+                courseName = "";
+                lessonLog = "";
+                PagenameLog = "Chat with us";
+                ActivityLog = "Counselling Page";
+                getLogEvent(CounsellingActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 return true;
             case R.id.navigation_contact:
+                courseName = "";
+                lessonLog = "";
+                PagenameLog = "Contact us";
+                ActivityLog = "Counselling Page";
+                getLogEvent(CounsellingActivity.this);
                 Intent contactIntent = new Intent(this, ContactUsActivity.class);
                 startActivity(contactIntent);
                 return true;
@@ -259,7 +264,7 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
     public void ChatUs(View view){
         CourseLog = "";
         PagenameLog = "chat with whatsapp";
-        ActivityLog = "Counselling Page";
+        ActivityLog = "Online Counselling Page";
         getLogEvent(CounsellingActivity.this);
         Intent myIntent = new Intent(Intent.ACTION_VIEW);
         myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
@@ -297,9 +302,14 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
             holder.videoPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    courseName = "";
+                    lessonLog = "";
+                    PagenameLog = counsellingData.get(position).getCounsellingTitle();
+                    ActivityLog = "Counselling Page";
+                    getLogEvent(CounsellingActivity.this);
                     mp4URL = counsellingData.get(position).getCounsellingVideo();
-                    lessonLog = holder.txtTitle.getText().toString().trim();
-                    PagenameLog = "Counselling page";
+                    lessonLog = "";
+                    courseName = counsellingData.get(position).getCounsellingTitle();
                     videoLayout.setVisibility(View.VISIBLE);
                     player.loadVideo(mp4URL);
                 }
@@ -308,10 +318,24 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
                 @Override
                 public void onClick(View v) {
                     lessonLog = "";
-                    ActivityLog = "Clicked on mobile number";
-                    PagenameLog = "Counselling page";
+                    courseName = counsellingData.get(position).getCounsellingTitle();
+                    PagenameLog = "Clicked on mobile number";
+                    ActivityLog = "Online Counselling Page";
                     getLogEvent(CounsellingActivity.this);
                     Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+getResources().getString(R.string.mobileNumber)));
+                    startActivity(intent);
+                }
+            });
+            holder.btnRegister.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    lessonLog = "";
+                    courseName = counsellingData.get(position).getCounsellingTitle();
+                    PagenameLog = "Clicked on Register";
+                    ActivityLog = "Online Counselling Page";
+                    new SocialMediaEventsHelper(CounsellingActivity.this).EventRegisterCourse();
+                    getLogEvent(CounsellingActivity.this);
+                    Intent intent = new Intent(CounsellingActivity.this, RegisterCourseActivity.class);
                     startActivity(intent);
                 }
             });
@@ -327,7 +351,7 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
 
         public class ViewHolder extends RecyclerView.ViewHolder{
             ImageView imgBanner,videoImage,videoPlay;
-            Button btnFindCenter;
+            Button btnFindCenter,btnRegister;
             TextView txtTitle;
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -336,6 +360,7 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
                 videoPlay = itemView.findViewById(R.id.videoPlay);
                 txtTitle = itemView.findViewById(R.id.txtTitle);
                 btnFindCenter = itemView.findViewById(R.id.btnFindCenter);
+                btnRegister = itemView.findViewById(R.id.btnRegister);
             }
         }
     }
@@ -346,7 +371,8 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
         @Override
         public void onPlaying() {
             playbackState = "PLAYING";
-            ActivityLog = "Video playing";
+            PagenameLog = "Video playing";
+            ActivityLog = "Online Counselling Page";
             getLogEvent(CounsellingActivity.this);
             log("\tPLAYING " + getTimesText());
         }
@@ -354,7 +380,8 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
         @Override
         public void onBuffering(boolean isBuffering) {
             bufferingState = isBuffering ? "(BUFFERING)" : "";
-            ActivityLog = "Video buffering";
+            PagenameLog = "Video buffering";
+            ActivityLog = "Online Counselling Page";
             getLogEvent(CounsellingActivity.this);
             log("\t\t" + (isBuffering ? "BUFFERING " : "NOT BUFFERING ") + getTimesText());
         }
@@ -362,7 +389,8 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
         @Override
         public void onStopped() {
             playbackState = "STOPPED";
-            ActivityLog = "Video stopped";
+            PagenameLog = "Video stopped";
+            ActivityLog = "Online Counselling Page";
             getLogEvent(CounsellingActivity.this);
             log("\tSTOPPED");
         }
@@ -370,7 +398,8 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
         @Override
         public void onPaused() {
             playbackState = "PAUSED";
-            ActivityLog = "Video paused";
+            PagenameLog = "Video paused";
+            ActivityLog = "Online Counselling Page";
             getLogEvent(CounsellingActivity.this);
             log("\tPAUSED " + getTimesText());
         }
@@ -437,6 +466,7 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
                         counsellingListAdapter = new CounsellingListAdapter(CounsellingActivity.this,counsellingData);
                         counsellingList.setLayoutManager(new LinearLayoutManager(CounsellingActivity.this, LinearLayoutManager.VERTICAL, false));
                         counsellingList.setAdapter(counsellingListAdapter);
+
                         hocLoadingDialog.hideDialog();
                     } else {
                         hocLoadingDialog.hideDialog();
@@ -481,11 +511,11 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
             data.put("fullname",UserDataConstants.userName);
             data.put("email",UserDataConstants.userMail);
             data.put("category","");
-            data.put("course","");
+            data.put("course",courseName);
             data.put("lesson",lessonLog);
             data.put("activity",ActivityLog);
             data.put("pagename",PagenameLog);
-            boolean logevent = logEventsActivity.LogEventsActivity(context,data);
+            logEventsActivity.LogEventsActivity(context,data);
         } catch (JSONException e) {
             e.printStackTrace();
         }

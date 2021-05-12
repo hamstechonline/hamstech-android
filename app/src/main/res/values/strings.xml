@@ -8,7 +8,8 @@
     <string name="lblSignHere"><u>Sign in</u></string>
     <string name="lblRegisterHere"><u>Register Instead</u></string>
     <string name="lblApiKey">dsf99898398i3jofklese93</string>
-    <string name="chatURL">https://wa.me/919010100240</string>
+    <string name="chatURL">https://wa.me/919100535552</string>
+    <string name="chatCounceller">9885420202</string>
     <string name="overview">Hamstech’s Creative Fashion Styling course is
 highly recommended for fashion enthusiasts
 and fashion professionals who want to
@@ -32,7 +33,47 @@ styling in detail.</string>
         <item>Affiliations</item>
         <item>Mentors</item>
     </string-array>
-    <string name="mobileNumber">+91 9009900990</string>
+    <string-array name="branchNames">
+        <item>Himayatnagar - 3RD Floor, OM Towers,
+            Opposite McDonald\u0027s,\n
+            Himayatnagar Main Road\n
+            Hyderabad-29 India\n
+            PHONE:+91-7416066555\n
+            EMAIL: info@hamstech.com</item>
+        <item>Punjagutta - II, III &amp; IV Floor,
+            R.K. Plaza, Punjagutta ‘X’ Road, Punjagutta,\n
+            Hyderabad – 82 India\n
+            PHONE:+91-40-66684994, +91-40-66684995\n
+            EMAIL: info@hamstech.com</item>
+        <item>Jubilee Hills - Plot No 472, 2nd Floor,
+            SAI Galleria,Above Nissan Showroom,\n
+            Road No 36, Jubilee Hills,\n
+            Hyderabad – 500033 India\n
+            PHONE:+91-7207057291\n
+            EMAIL: info@hamstech.com</item>
+        <item>Secunderabad - II Floor,
+            Jade Arcade, Paradise ‘X’ Road,\n
+            M.G. Road, Secunderabad – 03 India\n
+            PHONE:+91-40-66484997, +91-40-66484998\n
+            EMAIL: info@hamstech.com</item>
+        <item>Kukatpally - 3rd and 4th floor, above Neerus, \n
+            Forum Mall circle JNTU road, \n
+            Kukatpally Hyderabad – 72 India \n
+            PHONE:+91-04023155963 EMAIL: info@hamstech.com</item>
+        <item>Gachibowli - 4th Floor, Vamsiram builders, Jyothi Imperial\n
+            Above South India Mall,\n
+            Gachibowli Main Road, Gachibowli\n
+            Hyderabad – 32 India\n
+            PHONE:+91-7207599222\n
+            EMAIL: info@hamstech.com</item>
+        <item>Kothapet - 4th Floor, Above More Mega Store,\n
+            Beside Astalakshmi Temple Arch,\n
+            Kothapet.\n
+            Hyderabad – 35 India\n
+            PHONE:+91 40  2403 4994\n
+            EMAIL: info@hamstech.com</item>
+    </string-array>
+    <string name="mobileNumber">+91 9100535552</string>
     <string name="requestReceived">Request Received!</string>
     <string name="requestCallBack">You will receive a call from us shortly.</string>
     <string name="facebook_app_id">219965395681656</string>

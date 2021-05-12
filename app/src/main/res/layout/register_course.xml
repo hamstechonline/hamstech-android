@@ -113,7 +113,7 @@
                                 android:id="@+id/txtScholarship"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Get Scholarship"
+                                android:text="Get Scholarships and discounts by registering now and confirming your admission."
                                 android:textColor="@color/black"
                                 android:fontFamily="@font/robotobold"
                                 android:textSize="14sp"

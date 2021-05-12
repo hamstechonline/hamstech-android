@@ -86,20 +86,11 @@
                     android:orientation="vertical"
                     android:layout_marginBottom="76dp">
 
-                    <RelativeLayout
+                    <ImageView
+                        android:id="@+id/bannerImage"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:id="@+id/player_frame_layout"
-                        android:visibility="visible">
-
-                        <fragment
-                            android:id="@+id/youtubeFragment"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:name="com.google.android.youtube.player.YouTubePlayerFragment">
-                        </fragment>
-
-                    </RelativeLayout>
+                        android:scaleType="fitXY"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -111,6 +102,20 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/affiliationsList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Educational Alliances"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:padding="10dp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/educationalList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:scrollbars="none"/>

@@ -3,19 +3,23 @@ package com.hamstechapp.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +46,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.hamstechapp.R;
 import com.hamstechapp.adapter.CareerOptionsListAdapter;
 import com.hamstechapp.adapter.CareerOptionsPopupListAdapter;
@@ -50,6 +56,8 @@ import com.hamstechapp.adapter.CoursesListAdapter;
 import com.hamstechapp.adapter.PlacementsHomeListAdapter;
 import com.hamstechapp.adapter.SliderCardPagerAdapter;
 import com.hamstechapp.adapter.WhyHamstechHomeListAdapter;
+import com.hamstechapp.common.CounsellingPopup;
+import com.hamstechapp.common.DeveloperKey;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
 import com.hamstechapp.datamodel.AffiliationDataModel;
@@ -59,12 +67,12 @@ import com.hamstechapp.fragment.NavigationFragment;
 import com.hamstechapp.fragment.SearchFragment;
 import com.hamstechapp.utils.Constants;
 import com.hamstechapp.utils.GridSpacingItemDecoration;
+import com.hamstechapp.utils.SocialMediaEventsHelper;
 import com.hamstechapp.utils.UIUtils;
 import com.hamstechapp.utils.UserDataConstants;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,14 +94,20 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
     ImageView imgDiscover,placementImage,imgMentor;
     TextView txtCategoryName,txtHeaderTitle,mentorDescription,txtMentorName;
     CheckBox imgReadMore;
+    LinearLayout layoutMentor;
+    Button btnOurCounsellor;
 
     NavigationFragment navigationFragment;
     BottomNavigationView bottomNavigation;
     DrawerLayout drawer;
     ViewPager mViewPager;
 
-    YouTubePlayer player;
-    YouTubePlayerView youTubePlayerView;
+    RelativeLayout playerFrameLayout;
+    YouTubePlayerFragment youtubeFragment;
+    private YouTubePlayer player;
+    private StringBuilder logString;
+    private MyPlaybackEventListener playbackEventListener;
+
     SliderCardPagerAdapter mCardAdapter;
     Timer timer;
     int currentPage;
@@ -108,6 +122,7 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
     Handler handler;
     Runnable update;
     HocLoadingDialog hocLoadingDialog;
+    CounsellingPopup counsellingPopup;
     PlacementsHomeListAdapter placementsHomeListAdapter;
     CheckBox imgSearch;
     RelativeLayout searchParent;
@@ -141,15 +156,22 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
         searchParent = findViewById(R.id.searchParent);
         imgReadMore = findViewById(R.id.imgReadMore);
         imgMentor = findViewById(R.id.imgMentor);
-        youTubePlayerView = findViewById(R.id.youtube_player_view);
         listCourseHighlights = findViewById(R.id.listCourseHighlights);
         mentorDescription = findViewById(R.id.mentorDescription);
         txtMentorName = findViewById(R.id.txtMentorName);
+        layoutMentor = findViewById(R.id.layoutMentor);
+        btnOurCounsellor = findViewById(R.id.btnOurCounsellor);
 
+        playerFrameLayout = findViewById(R.id.player_frame_layout);
+
+        youtubeFragment = (YouTubePlayerFragment)
+                getFragmentManager().findFragmentById(R.id.youtubeFragment);
+        logString = new StringBuilder();
         bottomNavigation.setOnNavigationItemSelectedListener(this);
         bottomNavigation.getMenu().findItem(R.id.navigation_courses).setChecked(true);
 
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
         timer = new Timer();
         handler = new Handler();
@@ -162,17 +184,27 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
 
         getCourseData(this);
         txtHeaderTitle.setText(UserDataConstants.categoryName);
+        CourseLog = UserDataConstants.categoryName;
+        ActivityLog = "Course page";
+        loadYouTube();
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(CoursesActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                PagenameLog = "Counselling";
+                ActivityLog = "Course Page";
+                getLogEvent(CoursesActivity.this);
+                Intent intentAbout = new Intent(CoursesActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
         imgSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    PagenameLog = "Search";
+                    ActivityLog = "Course Page";
+                    getLogEvent(CoursesActivity.this);
+                    new SocialMediaEventsHelper(CoursesActivity.this).EventAccordion("Search");
                     txtHeaderTitle.setVisibility(View.GONE);
                     searchParent.setVisibility(View.VISIBLE);
                     searchFragment = SearchFragment.newInstance();
@@ -200,6 +232,17 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
                     careerOptionsList.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.VERTICAL, false));
                     careerOptionsList.setAdapter(careerOptionsListAdapter);
                 }
+            }
+        });
+        btnOurCounsellor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PagenameLog = "Talk to counsellor";
+                ActivityLog = "Course Page";
+                getLogEvent(CoursesActivity.this);
+                new SocialMediaEventsHelper(CoursesActivity.this).EventAccordion("Counsellor");
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+getResources().getString(R.string.chatCounceller)));
+                startActivity(intent);
             }
         });
     }
@@ -240,6 +283,9 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
+                PagenameLog = "Home page";
+                ActivityLog = "Course Page";
+                getLogEvent(CoursesActivity.this);
                 Intent intentHome = new Intent(CoursesActivity.this, HomeActivity.class);
                 startActivity(intentHome);
                 return true;
@@ -249,11 +295,17 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
 
                 return true;
             case R.id.navigation_chat:
+                PagenameLog = "Chat with us";
+                ActivityLog = "Course Page";
+                getLogEvent(CoursesActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 return true;
             case R.id.navigation_contact:
+                PagenameLog = "Contact us";
+                ActivityLog = "Course Page";
+                getLogEvent(CoursesActivity.this);
                 Intent contactIntent = new Intent(this, ContactUsActivity.class);
                 startActivity(contactIntent);
                 return true;
@@ -267,9 +319,86 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
         PagenameLog = "chat with whatsapp";
         ActivityLog = "Course Page";
         getLogEvent(CoursesActivity.this);
+        new SocialMediaEventsHelper(CoursesActivity.this).EventAccordion("chat with whatsapp");
         Intent myIntent = new Intent(Intent.ACTION_VIEW);
         myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
         startActivity(myIntent);
+    }
+    public void loadYouTube(){
+        playbackEventListener = new MyPlaybackEventListener();
+        youtubeFragment.initialize(DeveloperKey.DEVELOPER_KEY,
+                new com.google.android.youtube.player.YouTubePlayer.OnInitializedListener() {
+                    @Override
+                    public void onInitializationSuccess(com.google.android.youtube.player.YouTubePlayer.Provider provider,
+                                                        com.google.android.youtube.player.YouTubePlayer youTubePlayer, boolean wasRestored) {
+                        // do any work here to cue video, play video, etc.
+                        player = youTubePlayer;
+                        if (!wasRestored) {
+                            player.setPlaybackEventListener(playbackEventListener);
+                            //player.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
+                            //player.loadVideo(mp4URL);
+                        }
+                    }
+                    @Override
+                    public void onInitializationFailure(com.google.android.youtube.player.YouTubePlayer.Provider provider,
+                                                        YouTubeInitializationResult youTubeInitializationResult) {
+
+                    }
+                });
+    }
+
+    private final class MyPlaybackEventListener implements YouTubePlayer.PlaybackEventListener {
+        String playbackState = "NOT_PLAYING";
+        String bufferingState = "";
+        @Override
+        public void onPlaying() {
+            playbackState = "PLAYING";
+            log("\tPLAYING " + getTimesText());
+        }
+
+        @Override
+        public void onBuffering(boolean isBuffering) {
+            bufferingState = isBuffering ? "(BUFFERING)" : "";
+            log("\t\t" + (isBuffering ? "BUFFERING " : "NOT BUFFERING ") + getTimesText());
+        }
+
+        @Override
+        public void onStopped() {
+            playbackState = "STOPPED";
+            log("\tSTOPPED");
+        }
+
+        @Override
+        public void onPaused() {
+            playbackState = "PAUSED";
+            log("\tPAUSED " + getTimesText());
+        }
+
+        @Override
+        public void onSeekTo(int endPositionMillis) {
+            log(String.format("\tSEEKTO: (%s/%s)",
+                    formatTime(endPositionMillis),
+                    formatTime(player.getDurationMillis())));
+        }
+    }
+    private void log(String message) {
+        //Toast.makeText(this, ""+message, Toast.LENGTH_SHORT).show();
+        Log.e("Log","191    "+message);
+        logString.append(message + "\n");
+    }
+
+    private String getTimesText() {
+        int currentTimeMillis = player.getCurrentTimeMillis();
+        int durationMillis = player.getDurationMillis();
+        return String.format("(%s/%s)", formatTime(currentTimeMillis), formatTime(durationMillis));
+    }
+    private String formatTime(int millis) {
+        int seconds = millis / 1000;
+        int minutes = seconds / 60;
+        int hours = minutes / 60;
+
+        return (hours == 0 ? "" : hours + ":")
+                + String.format("%02d:%02d", minutes % 60, seconds % 60);
     }
 
     public void getCourseData(Context context){
@@ -373,13 +502,6 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
                         courseList.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.VERTICAL, false));
                         courseList.setAdapter(coursesListAdapter);
 
-                        /*placementsHomeListAdapter =new PlacementsHomeListAdapter(CoursesActivity.this,placementsData,placementsDataDown);
-                        placementsList.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                        placementsList.setAdapter(placementsHomeListAdapter);*/
-
-                        /*mCardAdapter = new SliderCardPagerAdapter(CoursesActivity.this,testimonialsData);
-                        mViewPager.setAdapter(mCardAdapter);
-                        mViewPager.setOffscreenPageLimit(3);*/
                         courseHighlightsAdapter = new CourseHighlightsAdapter(CoursesActivity.this,courseHighlights);
                         listCourseHighlights.setLayoutManager(new LinearLayoutManager(CoursesActivity.this, LinearLayoutManager.VERTICAL, false));
                         listCourseHighlights.setAdapter(courseHighlightsAdapter);
@@ -389,39 +511,18 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
                         whyHamstechList.addItemDecoration(new GridSpacingItemDecoration(2,0,false));
                         whyHamstechList.setAdapter(whyHamstechHomeListAdapter);
 
+                        if (!jo.getJSONArray("mentors_list").getJSONObject(0).getString("mentors_title").equals("")){
+                            txtMentorName.setText("Chief Mentor: "+jo.getJSONArray("mentors_list").getJSONObject(0).getString("mentors_title"));
+                        } else layoutMentor.setVisibility(View.GONE);
                         Glide.with(CoursesActivity.this)
                                 .asBitmap()
                                 .load(jo.getJSONArray("mentors_list").getJSONObject(0).getString("mentor_image"))
                                 //.placeholder(R.drawable.duser1)
                                 .into(UIUtils.getRoundedImageTarget(CoursesActivity.this, imgMentor, 20));
                         mentorDescription.setText(jo.getJSONArray("mentors_list").getJSONObject(0).getString("mentorss_description"));
-                        txtMentorName.setText(jo.getJSONArray("mentors_list").getJSONObject(0).getString("mentors_title"));
 
-                        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-                            @Override
-                            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                                //String videoId = UserDataConstants.videoUrl;
-                                player = youTubePlayer;
-                                player.loadVideo(mp4URL,0);
-                            }
-                            @Override
-                            public void onStateChange(YouTubePlayer youTubePlayer, PlayerConstants.PlayerState state) {
-                                super.onStateChange(youTubePlayer, state);
-                                CourseLog = UserDataConstants.categoryName;
-                                ActivityLog = "Course page";
-                                if (state.toString().equals("PLAYING")){
-                                    PagenameLog = "Video start";
-                                    getLogEvent(CoursesActivity.this);
-                                } else if (state.toString().equals("PAUSED")){
-                                    PagenameLog = "Video paused";
-                                    getLogEvent(CoursesActivity.this);
-                                } else if (state.toString().equals("STOPPED")){
-                                    PagenameLog = "Video stopped";
-                                    getLogEvent(CoursesActivity.this);
-                                }
-                            }
+                        player.loadVideo(mp4URL);
 
-                        });
                         if (careerData.size() >= 4){
                             imgReadMore.setVisibility(View.VISIBLE);
                         } else {
@@ -503,7 +604,7 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
             data.put("fullname",UserDataConstants.userName);
             data.put("email",UserDataConstants.userMail);
             data.put("category","");
-            data.put("course","");
+            data.put("course",CourseLog);
             data.put("lesson","");
             data.put("activity",ActivityLog);
             data.put("pagename",PagenameLog);

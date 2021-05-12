@@ -19,11 +19,20 @@ import com.hamstechapp.activities.AboutUsActivity;
 import com.hamstechapp.activities.AffiliationsActivity;
 import com.hamstechapp.activities.ContactUsActivity;
 import com.hamstechapp.activities.CounsellingActivity;
+import com.hamstechapp.activities.CourseDetailsActivity;
+import com.hamstechapp.activities.CoursesActivity;
 import com.hamstechapp.activities.LifeatHamstechActivity;
 import com.hamstechapp.activities.MentorsActivity;
 import com.hamstechapp.activities.NotificationActivity;
 import com.hamstechapp.activities.ProfileActivity;
 import com.hamstechapp.activities.RegisterCourseActivity;
+import com.hamstechapp.common.CounsellingPopup;
+import com.hamstechapp.common.LogEventsActivity;
+import com.hamstechapp.utils.SocialMediaEventsHelper;
+import com.hamstechapp.utils.UserDataConstants;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,12 +46,17 @@ public class HamburgMenuListAdapter extends RecyclerView.Adapter<HamburgMenuList
             R.drawable.ic_contact_pink,R.drawable.ic_register_pink};
     HamburgChildListAdapter hamburgChildListAdapter;
     boolean isSelect;
+    CounsellingPopup counsellingPopup;
+    LogEventsActivity logEventsActivity;
+    String ActivityLog,PagenameLog,lessonLog,CourseLog;
 
     public HamburgMenuListAdapter(Context context, List<String> expandableListTitle,
                                   List<String> expandableListDetail){
         this.context = context;
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
+        counsellingPopup = new CounsellingPopup(context);
+        logEventsActivity = new LogEventsActivity();
     }
 
     @NonNull
@@ -67,12 +81,14 @@ public class HamburgMenuListAdapter extends RecyclerView.Adapter<HamburgMenuList
                 @Override
                 public void onClick(View v) {
                     if (position == 0){
+                        setLogEvents("Profile");
                         holder.linearParent.setBackgroundColor(context.getResources().getColor(R.color.white));
                         holder.listChild.setVisibility(View.GONE);
                         holder.listTitle.setTextColor(context.getResources().getColor(R.color.hamburgTextColor));
                         Intent intentAbout = new Intent(context, ProfileActivity.class);
                         context.startActivity(intentAbout);
                     } else if (position == 1){
+                        setLogEvents("Notifications page");
                         holder.linearParent.setBackgroundColor(context.getResources().getColor(R.color.white));
                         holder.listChild.setVisibility(View.GONE);
                         holder.listTitle.setTextColor(context.getResources().getColor(R.color.hamburgTextColor));
@@ -97,30 +113,36 @@ public class HamburgMenuListAdapter extends RecyclerView.Adapter<HamburgMenuList
                             holder.imgGroupIcon.setImageResource(R.drawable.ic_down_arrow);
                         }
                     } else if (position == 3){
+                        setLogEvents("LifeatHamstech page");
                         holder.linearParent.setBackgroundColor(context.getResources().getColor(R.color.white));
                         holder.listChild.setVisibility(View.GONE);
                         holder.listTitle.setTextColor(context.getResources().getColor(R.color.hamburgTextColor));
                         Intent intentAbout = new Intent(context, LifeatHamstechActivity.class);
                         context.startActivity(intentAbout);
                     } else if (position == 4){
+                        setLogEvents("Counselling page");
                         holder.linearParent.setBackgroundColor(context.getResources().getColor(R.color.white));
                         holder.listChild.setVisibility(View.GONE);
                         holder.listTitle.setTextColor(context.getResources().getColor(R.color.hamburgTextColor));
                         Intent intentAbout = new Intent(context, CounsellingActivity.class);
                         context.startActivity(intentAbout);
                     } else if (position == 5){
+                        setLogEvents("Chat with us");
                         holder.linearParent.setBackgroundColor(context.getResources().getColor(R.color.white));
                         holder.listChild.setVisibility(View.GONE);
                         Intent myIntent = new Intent(Intent.ACTION_VIEW);
                         myIntent.setData(Uri.parse(context.getResources().getString(R.string.chatURL)));
                         context.startActivity(myIntent);
                     } else if (position == 6){
+                        setLogEvents("Contact us");
                         holder.linearParent.setBackgroundColor(context.getResources().getColor(R.color.white));
                         holder.listChild.setVisibility(View.GONE);
                         holder.listTitle.setTextColor(context.getResources().getColor(R.color.hamburgTextColor));
                         Intent intentAbout = new Intent(context, ContactUsActivity.class);
                         context.startActivity(intentAbout);
                     } else if (position == 7){
+                        setLogEvents("RegisterCurses");
+                        new SocialMediaEventsHelper(context).EventRegisterCourse();
                         holder.linearParent.setBackgroundColor(context.getResources().getColor(R.color.white));
                         holder.listChild.setVisibility(View.GONE);
                         holder.listTitle.setTextColor(context.getResources().getColor(R.color.hamburgTextColor));
@@ -181,12 +203,15 @@ public class HamburgMenuListAdapter extends RecyclerView.Adapter<HamburgMenuList
                     @Override
                     public void onClick(View v) {
                         if (position == 0){
+                            setLogEvents("About us page");
                             Intent intentAbout = new Intent(context, AboutUsActivity.class);
                             context.startActivity(intentAbout);
                         } else if (position == 1){
+                            setLogEvents("Affiliations page");
                             Intent intentAbout = new Intent(context, AffiliationsActivity.class);
                             context.startActivity(intentAbout);
                         } else if (position == 2){
+                            setLogEvents("Mentors page");
                             Intent intentAbout = new Intent(context, MentorsActivity.class);
                             context.startActivity(intentAbout);
                         }
@@ -210,6 +235,29 @@ public class HamburgMenuListAdapter extends RecyclerView.Adapter<HamburgMenuList
                 expandedListItem = itemView.findViewById(R.id.expandedListItem);
                 linearParent = itemView.findViewById(R.id.linearParent);
             }
+        }
+    }
+    public void setLogEvents(String event){
+        PagenameLog = event;
+        ActivityLog = "Hamburg menu";
+        getLogEvent(context);
+    }
+    public void getLogEvent(Context context){
+        JSONObject data = new JSONObject();
+        try {
+            data.put("apikey",context.getResources().getString(R.string.lblApiKey));
+            data.put("appname","Dashboard");
+            data.put("mobile", UserDataConstants.userMobile);
+            data.put("fullname",UserDataConstants.userName);
+            data.put("email",UserDataConstants.userMail);
+            data.put("category","");
+            data.put("course","");
+            data.put("lesson","");
+            data.put("activity",ActivityLog);
+            data.put("pagename",PagenameLog);
+            logEventsActivity.LogEventsActivity(context,data);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

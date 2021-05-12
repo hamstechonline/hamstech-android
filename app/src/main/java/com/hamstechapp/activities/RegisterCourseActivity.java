@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -45,6 +46,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hamstechapp.R;
 import com.hamstechapp.ccAvenueActivities.WebViewActivity;
 import com.hamstechapp.ccAvenueUtils.AvenuesParams;
+import com.hamstechapp.common.CounsellingPopup;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
 import com.hamstechapp.datamodel.HomePageDatamodel;
@@ -68,6 +70,7 @@ public class RegisterCourseActivity extends AppCompatActivity implements BottomN
     DrawerLayout drawer;
     ImageView imgDiscover,imgSelectedImage;
     HocLoadingDialog hocLoadingDialog;
+    CounsellingPopup counsellingPopup;
     UserDataConstants userDataConstants;
     String ActivityLog,PagenameLog,lessonLog,CourseLog,categoryLog;
     LogEventsActivity logEventsActivity;
@@ -152,6 +155,7 @@ public class RegisterCourseActivity extends AppCompatActivity implements BottomN
                 .commit();
 
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
         userDataConstants = new UserDataConstants();
         logEventsActivity = new LogEventsActivity();
         UserDataConstants.courseId = ""+0;
@@ -222,14 +226,22 @@ public class RegisterCourseActivity extends AppCompatActivity implements BottomN
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(RegisterCourseActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                lessonLog = "";
+                PagenameLog = "Counselling page";
+                ActivityLog = "RegisterCourse Page";
+                getLogEvent(RegisterCourseActivity.this);
+                Intent intentAbout = new Intent(RegisterCourseActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
         imgSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    lessonLog = "";
+                    PagenameLog = "Search";
+                    ActivityLog = "RegisterCourse Page";
+                    getLogEvent(RegisterCourseActivity.this);
                     txtHeaderTitle.setVisibility(View.GONE);
                     searchParent.setVisibility(View.VISIBLE);
                     searchFragment = SearchFragment.newInstance();
@@ -276,10 +288,18 @@ public class RegisterCourseActivity extends AppCompatActivity implements BottomN
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
+                lessonLog = "";
+                PagenameLog = "Home page";
+                ActivityLog = "RegisterCourse Page";
+                getLogEvent(RegisterCourseActivity.this);
                 Intent intentHome = new Intent(RegisterCourseActivity.this, HomeActivity.class);
                 startActivity(intentHome);
                 return true;
             case R.id.navigation_courses:
+                lessonLog = "";
+                PagenameLog = "Course page";
+                ActivityLog = "RegisterCourse Page";
+                getLogEvent(RegisterCourseActivity.this);
                 Intent intentCourses = new Intent(this, HomeActivity.class);
                 intentCourses.putExtra("isCoursePage","Course");
                 startActivity(intentCourses);
@@ -288,11 +308,19 @@ public class RegisterCourseActivity extends AppCompatActivity implements BottomN
 
                 return true;
             case R.id.navigation_chat:
+                lessonLog = "";
+                PagenameLog = "Chat with us";
+                ActivityLog = "RegisterCourse Page";
+                getLogEvent(RegisterCourseActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 return true;
             case R.id.navigation_contact:
+                lessonLog = "";
+                PagenameLog = "Contact us";
+                ActivityLog = "RegisterCourse Page";
+                getLogEvent(RegisterCourseActivity.this);
                 Intent contactIntent = new Intent(this, ContactUsActivity.class);
                 startActivity(contactIntent);
                 return true;
@@ -359,19 +387,19 @@ public class RegisterCourseActivity extends AppCompatActivity implements BottomN
     }
 
     public void PayNow(){
-        String vAmount = "1";
+        String vAmount = Float.toString(amount);
         String vAccessCode = "AVVS92HF95BT57SVTB";
         String vMerchantId = "258349";
         String vCurrency = "INR";
-
+        Log.e("Amount","370    "+vAmount);
         if(!vAccessCode.equals("") && !vMerchantId.equals("") && !vCurrency.equals("") && !vAmount.equals("")){
             Intent intent = new Intent(this, WebViewActivity.class);
             intent.putExtra(AvenuesParams.ACCESS_CODE, vAccessCode);
             intent.putExtra(AvenuesParams.MERCHANT_ID, vMerchantId);
             intent.putExtra(AvenuesParams.ORDER_ID, String.valueOf(orderID));
             intent.putExtra(AvenuesParams.CURRENCY, vCurrency);
-            //intent.putExtra(AvenuesParams.AMOUNT, vAmount);
-            intent.putExtra(AvenuesParams.AMOUNT, "1");
+            intent.putExtra(AvenuesParams.AMOUNT, vAmount);
+            //intent.putExtra(AvenuesParams.AMOUNT, "1");
             intent.putExtra(AvenuesParams.BILLING_NAME, txtFirstName.getText().toString().trim()+
                     " "+txtLastName.getText().toString().trim());
             intent.putExtra(AvenuesParams.BILLING_ADDRESS, txtAddress.getText().toString().trim());
@@ -386,6 +414,7 @@ public class RegisterCourseActivity extends AppCompatActivity implements BottomN
             intent.putExtra(AvenuesParams.CANCEL_URL, Constants.redirectUrl);
             intent.putExtra(AvenuesParams.RSA_KEY_URL, Constants.getRsaKey+String.valueOf(orderID));
             //intent.putExtra("mRequestBody",mRequestBody);
+            Log.e("Amount","393    "+vAmount);
             startActivity(intent);
         }else{
             Toast.makeText(this, "All parameters are mandatory.", Toast.LENGTH_SHORT).show();
@@ -573,9 +602,13 @@ public class RegisterCourseActivity extends AppCompatActivity implements BottomN
                             courseListParent.setVisibility(View.GONE);
                             selectedLayout.setVisibility(View.VISIBLE);
                             amount = Float.parseFloat(childListData.get(position).getCourseAmount());
-                            txtScholarship.setText("Get Scholarships and discounts by registering now for a refundable amount of Rs. "+
-                                    NumberFormat.getInstance().format(amount)+"/- and confirm your admission.");
+                            txtScholarship.setText("Get Scholarships and discounts by registering now and confirming your admission.");
                             txtMobile.setText(UserDataConstants.userMobile);
+                            txtFirstName.setText(UserDataConstants.userName);
+                            //txtAddress.setText(UserDataConstants.userAddress);
+                            txtCity.setText(UserDataConstants.userCity);
+                            txtState.setText(UserDataConstants.userState);
+                            txtPincode.setText(UserDataConstants.userPincode);
                             txtSelectedCourseName.setText(childListData.get(position).getCourseName());
                             txtSelectedCatName.setText(childListData.get(position).getCatName());
                             UserDataConstants.courseId = childListData.get(position).getCourseId();

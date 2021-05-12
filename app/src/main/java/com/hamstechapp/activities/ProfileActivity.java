@@ -43,6 +43,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hamstechapp.R;
+import com.hamstechapp.common.CounsellingPopup;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
 import com.hamstechapp.fragment.NavigationFragment;
@@ -85,6 +86,7 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
     EditText txtUserName,txtAddress;
     Button btnSave;
     HocLoadingDialog hocLoadingDialog;
+    CounsellingPopup counsellingPopup;
     CheckBox imgSearch;
     TextView txtHeaderTitle;
     RelativeLayout searchParent;
@@ -124,7 +126,6 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
 
         txtCenter.setText(UserDataConstants.branchName);
         txtUserName.setEnabled(false);
-        txtAddress.setEnabled(false);
 
         navigationFragment = NavigationFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -133,6 +134,7 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
                 .commit();
 
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
         Glide.with(ProfileActivity.this)
                 .asBitmap()
@@ -167,8 +169,8 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(ProfileActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                Intent intentAbout = new Intent(ProfileActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
         imgSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -421,6 +423,8 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
                                 .placeholder(R.drawable.ic_userprofile)
                                 .error(R.drawable.ic_userprofile)
                                 .into(imgProfile);
+                        txtAddress.setEnabled(true);
+                        txtAddress.setPressed(true);
                         hocLoadingDialog.hideDialog();
                     } else {
                         hocLoadingDialog.hideDialog();
@@ -548,7 +552,6 @@ public class ProfileActivity extends AppCompatActivity implements BottomNavigati
                         txtUserName.setText(jsonObject.getString("name"));
                         txtAddress.setText(jsonObject.getString("address"));
                         txtUserName.setEnabled(false);
-                        txtAddress.setEnabled(false);
                         hocLoadingDialog.hideDialog();
                     } else {
                         hocLoadingDialog.hideDialog();

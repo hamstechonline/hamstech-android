@@ -27,7 +27,7 @@
                     android:id="@+id/txtHeaderTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Home"
+                    android:text="Hamstech"
                     android:fontFamily="@font/robotoregular"
                     android:textColor="@color/black"
                     android:textSize="20sp"
@@ -198,7 +198,7 @@
                         android:id="@+id/txtVideoContent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Watch how we’ve been inspiring the youth to choose creative fields of study and build a successful career for 28 years"
+                        android:text="Now get rid of all the confusion and choose a creative course that is right for you. How? Just talk to our experts and clear all your doubts"
                         android:textSize="14sp"
                         android:fontFamily="@font/robotoregular"
                         android:textColor="@color/black"
@@ -285,22 +285,64 @@ mentors."
                         android:layout_height="200dp"
                         android:visibility="gone"/>
 
-                    <androidx.recyclerview.widget.RecyclerView
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp">
+
+                        <androidx.viewpager.widget.ViewPager
+                            android:id="@+id/placementSlider"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clipToPadding="false"
+                            android:overScrollMode="never"
+                            android:background="@android:color/transparent"
+                            />
+
+                        <me.relex.circleindicator.CircleIndicator
+                            android:id="@+id/placementcircle"
+                            android:layout_width="match_parent"
+                            android:layout_height="17dp"
+                            android:gravity="center"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="20dp"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/placementsPrevious"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_previous_black"
+                            android:layout_margin="20dp"/>
+
+                        <ImageView
+                            android:id="@+id/placementsNext"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_next_black"
+                            android:layout_alignParentRight="true"
+                            android:layout_margin="20dp"/>
+
+                    </RelativeLayout>
+
+                    <!--<androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/placementsList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:scrollbars="none"
-                        android:visibility="visible"/>
+                        android:visibility="visible"/>-->
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Affiliations"
+                        android:text="Affiliations and Alliances"
                         android:fontFamily="@font/robotoblack"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold"
+                        android:gravity="center_vertical"
                         android:padding="10dp"/>
 
                     <TextView
@@ -314,7 +356,8 @@ universities."
                         android:textColor="@color/black"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:paddingBottom="8dp"/>
+                        android:paddingBottom="8dp"
+                        android:visibility="gone"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -381,7 +424,7 @@ with us."
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/viewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="230dp"
+                        android:layout_height="190dp"
                         android:clipToPadding="false"
                         android:overScrollMode="never"
                         android:paddingEnd="0dp"

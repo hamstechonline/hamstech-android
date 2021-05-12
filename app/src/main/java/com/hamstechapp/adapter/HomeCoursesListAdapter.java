@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,7 +56,7 @@ public class HomeCoursesListAdapter extends RecyclerView.Adapter<HomeCoursesList
                     .load(courseData.get(position).getCourseImage())
                     //.placeholder(R.drawable.duser1)
                     .into(holder.imgBanner);
-            holder.txtTitle.setOnClickListener(new View.OnClickListener() {
+            holder.parentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ActivityLog = "Clicked on courses";
@@ -79,10 +80,12 @@ public class HomeCoursesListAdapter extends RecyclerView.Adapter<HomeCoursesList
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtTitle;
         ImageView imgBanner;
+        RelativeLayout parentLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtTitle = itemView.findViewById(R.id.txtTitle);
             imgBanner = itemView.findViewById(R.id.imgBanner);
+            parentLayout = itemView.findViewById(R.id.parentLayout);
         }
     }
 
@@ -94,8 +97,8 @@ public class HomeCoursesListAdapter extends RecyclerView.Adapter<HomeCoursesList
             data.put("mobile", UserDataConstants.userMobile);
             data.put("fullname",UserDataConstants.userName);
             data.put("email","");
-            data.put("category","");
-            data.put("course",CourseLog);
+            data.put("category",CourseLog);
+            data.put("course","");
             data.put("lesson","");
             data.put("activity",ActivityLog);
             data.put("pagename",PagenameLog);

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +16,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -43,12 +46,15 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hamstechapp.R;
 import com.hamstechapp.adapter.CurriculumListAdapter;
+import com.hamstechapp.common.CounsellingPopup;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
 import com.hamstechapp.datamodel.CourseDataModel;
+import com.hamstechapp.datamodel.CourseDetailsData;
 import com.hamstechapp.fragment.NavigationFragment;
 import com.hamstechapp.fragment.SearchFragment;
 import com.hamstechapp.utils.Constants;
+import com.hamstechapp.utils.SocialMediaEventsHelper;
 import com.hamstechapp.utils.UIUtils;
 import com.hamstechapp.utils.UserDataConstants;
 
@@ -57,21 +63,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class CourseDetailsActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     NavigationFragment navigationFragment;
     BottomNavigationView bottomNavigation;
     DrawerLayout drawer;
+    LinearLayout layoutRegister;
     ImageView imgCourseBanner,imgDiscover;
     Button btnEnroll;
     HocLoadingDialog hocLoadingDialog;
-    TextView txtHeaderTitle,txtOverviewText,txtDuration;
+    CounsellingPopup counsellingPopup;
+    TextView txtHeaderTitle,txtOverviewText,txtDuration,txtAwardName;
     CheckBox imgReadMore;
     CurriculumListAdapter curriculumListAdapter;
     RecyclerView curriculumList;
     ArrayList<CourseDataModel> curriculumData = new ArrayList<>();
+    HashMap<String, ArrayList<CourseDetailsData>> courseDetailData = new HashMap<>();
+    ArrayList<CourseDetailsData> semData = new ArrayList<>();
     CheckBox imgSearch;
     RelativeLayout searchParent;
     SearchFragment searchFragment;
@@ -103,6 +116,8 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
         searchParent = findViewById(R.id.searchParent);
         imgReadMore = findViewById(R.id.imgReadMore);
         btnEnroll = findViewById(R.id.btnEnroll);
+        txtAwardName = findViewById(R.id.txtAwardName);
+        layoutRegister = findViewById(R.id.layoutRegister);
 
         bottomNavigation.setOnNavigationItemSelectedListener(this);
         bottomNavigation.getMenu().findItem(R.id.navigation_enrol).setChecked(true);
@@ -114,6 +129,7 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
                 .commit();
 
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
         txtHeaderTitle.setText(UserDataConstants.courseName);
         imgSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -148,6 +164,18 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
             public void onClick(View v) {
                 ActivityLog = "Enroll now";
                 PagenameLog = "Course details page";
+                new SocialMediaEventsHelper(CourseDetailsActivity.this).EventRegisterCourse();
+                getLogEvent(CourseDetailsActivity.this);
+                Intent intentRegister = new Intent(CourseDetailsActivity.this, RegisterCourseActivity.class);
+                startActivity(intentRegister);
+            }
+        });
+        layoutRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityLog = "Register now";
+                PagenameLog = "Course details page";
+                new SocialMediaEventsHelper(CourseDetailsActivity.this).EventRegisterCourse();
                 getLogEvent(CourseDetailsActivity.this);
                 Intent intentRegister = new Intent(CourseDetailsActivity.this, RegisterCourseActivity.class);
                 startActivity(intentRegister);
@@ -179,8 +207,11 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(CourseDetailsActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                PagenameLog = "Counselling Page";
+                ActivityLog = "Counselling Page";
+                getLogEvent(CourseDetailsActivity.this);
+                Intent intentAbout = new Intent(CourseDetailsActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
     }
@@ -194,10 +225,16 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
+                PagenameLog = "Home page";
+                ActivityLog = "Counselling Page";
+                getLogEvent(CourseDetailsActivity.this);
                 Intent intentHome = new Intent(CourseDetailsActivity.this, HomeActivity.class);
                 startActivity(intentHome);
                 return true;
             case R.id.navigation_courses:
+                PagenameLog = "Course page";
+                ActivityLog = "Counselling Page";
+                getLogEvent(CourseDetailsActivity.this);
                 Intent intentCourses = new Intent(this, HomeActivity.class);
                 intentCourses.putExtra("isCoursePage","Course");
                 startActivity(intentCourses);
@@ -206,11 +243,17 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
 
                 return true;
             case R.id.navigation_chat:
+                PagenameLog = "Chat with us";
+                ActivityLog = "Counselling Page";
+                getLogEvent(CourseDetailsActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 return true;
             case R.id.navigation_contact:
+                PagenameLog = "Contact us";
+                ActivityLog = "Counselling Page";
+                getLogEvent(CourseDetailsActivity.this);
                 Intent intentContact = new Intent(this, ContactUsActivity.class);
                 startActivity(intentContact);
                 return true;
@@ -241,6 +284,7 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
             params.put("categoryId", UserDataConstants.categoryId);
             params.put("courseId", UserDataConstants.courseId);
             metadata.put("metadata",params);
+            Log.e("metadata","261    "+metadata.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -254,19 +298,42 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
                     JSONObject jo = new JSONObject(response);
                     if (jo.getString("status").equals("ok")){
 
-                        JSONArray jsonArray = jo.getJSONArray("course_list");
+                        JSONArray jsonArray = jo.getJSONArray("curriculum_options");
+                        JSONObject courseObject = jo.getJSONObject("course");
 
                         Glide.with(CourseDetailsActivity.this)
                                 .asBitmap()
-                                .load(jsonArray.getJSONObject(0).getString("image_url"))
+                                .load(courseObject.getString("image_url"))
                                 .fitCenter()
                                 .into(UIUtils.getRoundedImageTarget(CourseDetailsActivity.this, imgCourseBanner, 30));
-                        overviewText = jsonArray.getJSONObject(0).getString("introduction");
-                        txtOverviewText.setText(jsonArray.getJSONObject(0).getString("introduction"));
-                        txtDuration.setText("Duration: "+jsonArray.getJSONObject(0).getString("duration") +"\n"+
-                                "Eligibility: "+jsonArray.getJSONObject(0).getString("eligibility"));
+                        overviewText = courseObject.getString("introduction");
+                        txtOverviewText.setText(courseObject.getString("introduction"));
+                        txtDuration.setText("Duration: "+courseObject.getString("duration") +"\n"+
+                                "Eligibility: "+courseObject.getString("eligibility"));
+                        txtAwardName.setText(courseObject.getString("university"));
                         curriculumData.clear();
-                        JSONArray curriculumArray = jo.getJSONArray("curriculum_options");
+                        courseDetailData.clear();
+                        semData.clear();
+                        for (int j = 0; j<jsonArray.length(); j++){
+                            CourseDataModel courseDataModel = new CourseDataModel();
+                            courseDataModel.setSemId(jsonArray.getJSONObject(j).getString("sem_id"));
+                            courseDataModel.setSemName(jsonArray.getJSONObject(j).getString("sem_name"));
+                            curriculumData.add(courseDataModel);
+                            JSONArray childData = jsonArray.getJSONObject(j).getJSONArray("sem_details");
+                            for (int k = 0; k <  childData.length(); k++) {
+                                CourseDetailsData courseDetailsData = new CourseDetailsData();
+                                courseDetailsData.setSem_id(childData.getJSONObject(k).getString("sem_id"));
+                                courseDetailsData.setSem_name(childData.getJSONObject(k).getString("sem_name"));
+                                courseDetailsData.setCurriculum(childData.getJSONObject(k).getString("curriculum"));
+                                courseDetailsData.setCourseId(childData.getJSONObject(k).getString("courseId"));
+                                courseDetailsData.setCategoryId(childData.getJSONObject(k).getString("categoryId"));
+
+                                semData.add(courseDetailsData);
+                            }
+
+                            courseDetailData.put(jsonArray.getJSONObject(j).getString("sem_name"), semData);
+                        }
+                        /*JSONArray curriculumArray = jo.getJSONArray("curriculum_options");
                         for (int j = 0; j<curriculumArray.length(); j++){
                             JSONObject courseObject = curriculumArray.getJSONObject(j);
                             CourseDataModel courseDataModel = new CourseDataModel();
@@ -277,6 +344,9 @@ public class CourseDetailsActivity extends AppCompatActivity implements BottomNa
                             curriculumData.add(courseDataModel);
                         }
                         curriculumListAdapter = new CurriculumListAdapter(CourseDetailsActivity.this,curriculumData);
+                        curriculumList.setLayoutManager(new LinearLayoutManager(CourseDetailsActivity.this, LinearLayoutManager.VERTICAL, false));
+                        curriculumList.setAdapter(curriculumListAdapter);*/
+                        curriculumListAdapter = new CurriculumListAdapter(CourseDetailsActivity.this,curriculumData,semData);
                         curriculumList.setLayoutManager(new LinearLayoutManager(CourseDetailsActivity.this, LinearLayoutManager.VERTICAL, false));
                         curriculumList.setAdapter(curriculumListAdapter);
                         hocLoadingDialog.hideDialog();

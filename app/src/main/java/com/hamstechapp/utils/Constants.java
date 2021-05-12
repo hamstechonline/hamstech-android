@@ -23,6 +23,7 @@ public class Constants {
     public static String getaffliations = BaseUrl+"api/list/affliations";
     public static String getmentors = BaseUrl+"api/list/mentors";
     public static String lifeatHamstech = BaseUrl+"api/list/life_at_hamstech";
+    public static String lifeatHamstechEvents = BaseUrl+"api/list/life_at_hamstech_events";
     public static String getCourseData = BaseUrl+"api/list/get_careerooption_bycat/";
     public static String redirectUrl = "https://app.hamstech.com/dev/api/list/transactions/";
     public static String getCourseDetails = BaseUrl+"api/list/get_coursecurriculum_bycat/";

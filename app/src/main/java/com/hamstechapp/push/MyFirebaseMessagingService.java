@@ -25,9 +25,12 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.hamstechapp.R;
 import com.hamstechapp.activities.AboutUsActivity;
+import com.hamstechapp.activities.AffiliationsActivity;
 import com.hamstechapp.activities.ContactUsActivity;
 import com.hamstechapp.activities.DynamicLinkingActivity;
 import com.hamstechapp.activities.HomeActivity;
+import com.hamstechapp.activities.LifeatHamstechActivity;
+import com.hamstechapp.activities.MentorsActivity;
 import com.hamstechapp.activities.NotificationActivity;
 import com.hamstechapp.activities.RegisterCourseActivity;
 import com.hamstechapp.activities.SplashActivity;
@@ -48,7 +51,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
     Intent intent;
     Bitmap image;
-    String imageLarge,activityLog,PagenameLog,notiTitle;
+    String imageLarge,activityLog,PagenameLog,notiTitle,userMobile,userName;
     NotificationCompat.Builder notificationBuilder;
     LogEventsActivity logEventsActivity;
     UserDatabase userDatabase;
@@ -65,9 +68,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         logEventsActivity = new LogEventsActivity();
         activityLog = "Notification";
         Log.e("Notification","67   "+remoteMessage.getData().toString());
-        userDatabase = Room.databaseBuilder(this,
-                UserDatabase.class, "database-name").allowMainThreadQueries().addCallback(callback).build();
-        new getUserDetails().execute();
+        /*userDatabase = Room.databaseBuilder(this,
+                UserDatabase.class, "database-name").allowMainThreadQueries().addCallback(callback).build();*/
+
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
@@ -98,6 +101,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (userDetails.size()!=0){
                 UserDataConstants.userMobile = userDetails.get(0).getPhone();
                 UserDataConstants.userName = userDetails.get(0).getName();
+            } else {
+                UserDataConstants.userMobile = "";
+                UserDataConstants.userName = "";
             }
 
             return null;
@@ -168,6 +174,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(RemoteMessage messageBody) {
+        userDatabase = Room.databaseBuilder(this,
+                UserDatabase.class, "database-name").allowMainThreadQueries().addCallback(callback).build();
+        new getUserDetails().execute();
         Log.e("messageBody","132    "+messageBody.getData().get("notificationID"));
         if (messageBody.getData().get("status").equals("notification")){
             intent = new Intent(this, NotificationActivity.class);
@@ -205,6 +214,38 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent = new Intent(this, DynamicLinkingActivity.class);
             notiTitle = messageBody.getData().get("title");
             PagenameLog = "Course Page";
+            getLogEvent(MyFirebaseMessagingService.this);
+            intent.putExtra("notificationId",messageBody.getData().get("notificationID"));
+            intent.putExtra("notiTitle",notiTitle);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        } else if (messageBody.getData().get("status").equals("affliations_page")){
+            intent = new Intent(this, AffiliationsActivity.class);
+            notiTitle = messageBody.getData().get("title");
+            PagenameLog = "Affiliations Page";
+            getLogEvent(MyFirebaseMessagingService.this);
+            intent.putExtra("notificationId",messageBody.getData().get("notificationID"));
+            intent.putExtra("notiTitle",notiTitle);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        } else if (messageBody.getData().get("status").equals("life_at_hamstech")){
+            intent = new Intent(this, LifeatHamstechActivity.class);
+            notiTitle = messageBody.getData().get("title");
+            PagenameLog = "Life at hamstech";
+            getLogEvent(MyFirebaseMessagingService.this);
+            intent.putExtra("notificationId",messageBody.getData().get("notificationID"));
+            intent.putExtra("notiTitle",notiTitle);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        } else if (messageBody.getData().get("status").equals("mentors")){
+            intent = new Intent(this, MentorsActivity.class);
+            notiTitle = messageBody.getData().get("title");
+            PagenameLog = "Mentors";
+            getLogEvent(MyFirebaseMessagingService.this);
+            intent.putExtra("notificationId",messageBody.getData().get("notificationID"));
+            intent.putExtra("notiTitle",notiTitle);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        } else if (messageBody.getData().get("status").equals("register_course_page")){
+            intent = new Intent(this, RegisterCourseActivity.class);
+            notiTitle = messageBody.getData().get("title");
+            PagenameLog = "Register course page";
             getLogEvent(MyFirebaseMessagingService.this);
             intent.putExtra("notificationId",messageBody.getData().get("notificationID"));
             intent.putExtra("notiTitle",notiTitle);

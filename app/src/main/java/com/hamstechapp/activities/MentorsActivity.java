@@ -39,6 +39,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.hamstechapp.R;
 import com.hamstechapp.adapter.MentorsListAdapter;
+import com.hamstechapp.common.CounsellingPopup;
 import com.hamstechapp.common.DeveloperKey;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
@@ -70,6 +71,7 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
     private StringBuilder logString;
     private MyPlaybackEventListener playbackEventListener;
     HocLoadingDialog hocLoadingDialog;
+    CounsellingPopup counsellingPopup;
     String mp4URL;
     ArrayList<AffiliationDataModel> arrayData = new ArrayList<>();
     CheckBox imgSearch;
@@ -116,6 +118,7 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
         logString = new StringBuilder();
         playbackEventListener = new MyPlaybackEventListener();
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
         playerFrameLayout.setVisibility(View.VISIBLE);
         youtubeFragment.initialize(DeveloperKey.DEVELOPER_KEY,
@@ -141,8 +144,11 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(MentorsActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                PagenameLog = "Counselling";
+                ActivityLog = "Mentors Page";
+                getLogEvent(MentorsActivity.this);
+                Intent intentAbout = new Intent(MentorsActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
 
@@ -150,6 +156,9 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    PagenameLog = "Search";
+                    ActivityLog = "Mentors Page";
+                    getLogEvent(MentorsActivity.this);
                     txtHeaderTitle.setVisibility(View.GONE);
                     searchParent.setVisibility(View.VISIBLE);
                     searchFragment = SearchFragment.newInstance();
@@ -197,10 +206,16 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
+                PagenameLog = "Home page";
+                ActivityLog = "Mentors Page";
+                getLogEvent(MentorsActivity.this);
                 Intent intentHome = new Intent(MentorsActivity.this, HomeActivity.class);
                 startActivity(intentHome);
                 return true;
             case R.id.navigation_courses:
+                PagenameLog = "Course page";
+                ActivityLog = "Mentors Page";
+                getLogEvent(MentorsActivity.this);
                 Intent intentCourses = new Intent(this, HomeActivity.class);
                 intentCourses.putExtra("isCoursePage","Course");
                 startActivity(intentCourses);
@@ -209,11 +224,17 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
 
                 return true;
             case R.id.navigation_chat:
+                PagenameLog = "Chat with Us";
+                ActivityLog = "Mentors Page";
+                getLogEvent(MentorsActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 return true;
             case R.id.navigation_contact:
+                PagenameLog = "Contact Us";
+                ActivityLog = "Mentors Page";
+                getLogEvent(MentorsActivity.this);
                 Intent contactIntent = new Intent(this, ContactUsActivity.class);
                 startActivity(contactIntent);
                 return true;

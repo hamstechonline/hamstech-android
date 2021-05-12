@@ -180,7 +180,7 @@
                                 android:text="Awarding Body: JNAFAU"
                                 android:fontFamily="@font/robotobold"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="22sp"
+                                android:textSize="20sp"
                                 android:textStyle="bold"/>
 
                             <View

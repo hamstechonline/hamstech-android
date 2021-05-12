@@ -33,12 +33,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.hamstechapp.R;
 import com.hamstechapp.adapter.AffiliationsHomeListAdapter;
+import com.hamstechapp.adapter.EducationalListAdapter;
+import com.hamstechapp.common.CounsellingPopup;
 import com.hamstechapp.common.DeveloperKey;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
@@ -47,6 +50,7 @@ import com.hamstechapp.fragment.NavigationFragment;
 import com.hamstechapp.fragment.SearchFragment;
 import com.hamstechapp.utils.Constants;
 import com.hamstechapp.utils.GridSpacingItemDecoration;
+import com.hamstechapp.utils.UIUtils;
 import com.hamstechapp.utils.UserDataConstants;
 
 import org.json.JSONArray;
@@ -61,22 +65,20 @@ public class AffiliationsActivity extends AppCompatActivity implements BottomNav
     NavigationFragment navigationFragment;
     BottomNavigationView bottom_navigation;
     DrawerLayout drawer;
-    ImageView imgDiscover;
+    ImageView imgDiscover,bannerImage;
     CheckBox imgSearch;
     TextView txtHeaderTitle;
-    RecyclerView affiliationsList;
+    RecyclerView affiliationsList,educationalList;
     RelativeLayout searchParent;
     SearchFragment searchFragment;
     AffiliationsHomeListAdapter affiliationsHomeListAdapter;
+    EducationalListAdapter educationalListAdapter;
     String ActivityLog,PagenameLog,CourseLog;
-    RelativeLayout playerFrameLayout;
-    YouTubePlayerFragment youtubeFragment;
-    private YouTubePlayer player;
-    private StringBuilder logString;
-    private MyPlaybackEventListener playbackEventListener;
     HocLoadingDialog hocLoadingDialog;
+    CounsellingPopup counsellingPopup;
     String mp4URL;
     ArrayList<AffiliationDataModel> arrayData = new ArrayList<>();
+    ArrayList<AffiliationDataModel> educationalData = new ArrayList<>();
     LogEventsActivity logEventsActivity;
 
     @Override
@@ -99,6 +101,8 @@ public class AffiliationsActivity extends AppCompatActivity implements BottomNav
         imgSearch = findViewById(R.id.imgSearch);
         txtHeaderTitle = findViewById(R.id.txtHeaderTitle);
         searchParent = findViewById(R.id.searchParent);
+        educationalList = findViewById(R.id.educationalList);
+        bannerImage = findViewById(R.id.bannerImage);
 
         bottom_navigation.setOnNavigationItemSelectedListener(this);
         bottom_navigation.getMenu().findItem(R.id.navigation_enrol).setChecked(true);
@@ -109,37 +113,15 @@ public class AffiliationsActivity extends AppCompatActivity implements BottomNav
                 .add(R.id.navSideMenu, navigationFragment, "")
                 .commit();
 
-        playerFrameLayout = findViewById(R.id.player_frame_layout);
-
-        youtubeFragment = (YouTubePlayerFragment)
-                getFragmentManager().findFragmentById(R.id.youtubeFragment);
-        logString = new StringBuilder();
-        playbackEventListener = new MyPlaybackEventListener();
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
-        playerFrameLayout.setVisibility(View.VISIBLE);
-        youtubeFragment.initialize(DeveloperKey.DEVELOPER_KEY,
-                new YouTubePlayer.OnInitializedListener() {
-                    @Override
-                    public void onInitializationSuccess(YouTubePlayer.Provider provider,
-                                                        YouTubePlayer youTubePlayer, boolean wasRestored) {
-                        player = youTubePlayer;
-                        if (!wasRestored) {
-                            player.setPlaybackEventListener(playbackEventListener);
-                        }
-                    }
-                    @Override
-                    public void onInitializationFailure(YouTubePlayer.Provider provider,
-                                                        YouTubeInitializationResult youTubeInitializationResult) {
-
-                    }
-                });
 
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(AffiliationsActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                Intent intentAbout = new Intent(AffiliationsActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
         imgSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -194,10 +176,16 @@ public class AffiliationsActivity extends AppCompatActivity implements BottomNav
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
+                PagenameLog = "Home page";
+                ActivityLog = "Affiliations Page";
+                getLogEvent(AffiliationsActivity.this);
                 Intent intentHome = new Intent(AffiliationsActivity.this, HomeActivity.class);
                 startActivity(intentHome);
                 return true;
             case R.id.navigation_courses:
+                PagenameLog = "Course page";
+                ActivityLog = "Affiliations Page";
+                getLogEvent(AffiliationsActivity.this);
                 Intent intentCourses = new Intent(this, HomeActivity.class);
                 intentCourses.putExtra("isCoursePage","Course");
                 startActivity(intentCourses);
@@ -206,36 +194,23 @@ public class AffiliationsActivity extends AppCompatActivity implements BottomNav
 
                 return true;
             case R.id.navigation_chat:
+                PagenameLog = "Chat with us";
+                ActivityLog = "Affiliations Page";
+                getLogEvent(AffiliationsActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 return true;
             case R.id.navigation_contact:
+                PagenameLog = "Contact us";
+                ActivityLog = "Affiliations Page";
+                getLogEvent(AffiliationsActivity.this);
                 Intent contactIntent = new Intent(this, ContactUsActivity.class);
                 startActivity(contactIntent);
                 return true;
         }
 
         return false;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (player!=null) player.play();
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (player!=null) player.pause();
-    }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        drawer.closeDrawers();
-        if (player!=null) player.pause();
     }
 
     public void ChatUs(View view){
@@ -272,22 +247,35 @@ public class AffiliationsActivity extends AppCompatActivity implements BottomNav
                     JSONObject jo = new JSONObject(response);
                     if (jo.getString("status").equals("ok")){
                         mp4URL = jo.getString("affliation_video");
+                        Glide.with(AffiliationsActivity.this)
+                                .asBitmap()
+                                .load(jo.getString("affliation_video"))
+                                .fitCenter()
+                                .into(UIUtils.getRoundedImageTarget(AffiliationsActivity.this, bannerImage, 30));
                         JSONArray jsonArray = jo.getJSONArray("affliation_data");
                         arrayData.clear();
+                        educationalData.clear();
                         for (int i = 0; i<jsonArray.length(); i++) {
                             AffiliationDataModel dataModel = new AffiliationDataModel();
                             dataModel.setId(jsonArray.getJSONObject(i).getString("affliation_id"));
                             dataModel.setAffiliationImage(jsonArray.getJSONObject(i).getString("affliation_Image"));
                             dataModel.setAffiliationDescription(jsonArray.getJSONObject(i).getString("affliations_descriptiom"));
-
-                            arrayData.add(dataModel);
+                            if (jsonArray.getJSONObject(i).getString("status").equals("1")){
+                                arrayData.add(dataModel);
+                            } else if (jsonArray.getJSONObject(i).getString("status").equals("2")){
+                                educationalData.add(dataModel);
+                            }
                         }
                         affiliationsHomeListAdapter = new AffiliationsHomeListAdapter(AffiliationsActivity.this,arrayData);
                         affiliationsList.setLayoutManager(new GridLayoutManager(AffiliationsActivity.this, 2));
                         affiliationsList.addItemDecoration(new GridSpacingItemDecoration(2,0,false));
                         affiliationsList.setAdapter(affiliationsHomeListAdapter);
+
+                        educationalListAdapter = new EducationalListAdapter(AffiliationsActivity.this,educationalData);
+                        educationalList.setLayoutManager(new GridLayoutManager(AffiliationsActivity.this, 2));
+                        educationalList.addItemDecoration(new GridSpacingItemDecoration(2,0,false));
+                        educationalList.setAdapter(educationalListAdapter);
                         hocLoadingDialog.hideDialog();
-                        player.loadVideo(mp4URL);
                     } else {
                         hocLoadingDialog.hideDialog();
                         Toast.makeText(AffiliationsActivity.this, ""+jo.getString("messsage"), Toast.LENGTH_SHORT).show();
@@ -324,59 +312,6 @@ public class AffiliationsActivity extends AppCompatActivity implements BottomNav
         };
 
         queue.add(sr);
-    }
-
-    private final class MyPlaybackEventListener implements YouTubePlayer.PlaybackEventListener {
-        String playbackState = "NOT_PLAYING";
-        String bufferingState = "";
-        @Override
-        public void onPlaying() {
-            playbackState = "PLAYING";
-            log("\tPLAYING " + getTimesText());
-        }
-
-        @Override
-        public void onBuffering(boolean isBuffering) {
-            bufferingState = isBuffering ? "(BUFFERING)" : "";
-            log("\t\t" + (isBuffering ? "BUFFERING " : "NOT BUFFERING ") + getTimesText());
-        }
-
-        @Override
-        public void onStopped() {
-            playbackState = "STOPPED";
-            log("\tSTOPPED");
-        }
-
-        @Override
-        public void onPaused() {
-            playbackState = "PAUSED";
-            log("\tPAUSED " + getTimesText());
-        }
-
-        @Override
-        public void onSeekTo(int endPositionMillis) {
-            log(String.format("\tSEEKTO: (%s/%s)",
-                    formatTime(endPositionMillis),
-                    formatTime(player.getDurationMillis())));
-        }
-        private void log(String message) {
-            Log.e("Log","191    "+message);
-            logString.append(message + "\n");
-        }
-
-        private String getTimesText() {
-            int currentTimeMillis = player.getCurrentTimeMillis();
-            int durationMillis = player.getDurationMillis();
-            return String.format("(%s/%s)", formatTime(currentTimeMillis), formatTime(durationMillis));
-        }
-        private String formatTime(int millis) {
-            int seconds = millis / 1000;
-            int minutes = seconds / 60;
-            int hours = minutes / 60;
-
-            return (hours == 0 ? "" : hours + ":")
-                    + String.format("%02d:%02d", minutes % 60, seconds % 60);
-        }
     }
 
     public void getLogEvent(Context context){

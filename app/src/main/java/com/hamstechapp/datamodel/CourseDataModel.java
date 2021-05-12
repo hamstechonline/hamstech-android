@@ -4,6 +4,25 @@ public class CourseDataModel {
     String careerOption;
     String careerId;
     String courseId;
+    String semId;
+
+    public String getSemId() {
+        return semId;
+    }
+
+    public void setSemId(String semId) {
+        this.semId = semId;
+    }
+
+    public String getSemName() {
+        return semName;
+    }
+
+    public void setSemName(String semName) {
+        this.semName = semName;
+    }
+
+    String semName;
 
     public String getCurriculumId() {
         return curriculumId;

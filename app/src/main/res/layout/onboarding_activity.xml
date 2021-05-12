@@ -48,6 +48,6 @@
         app:radius="6dip"
         app:strokeWidth="0dp"
         android:layout_marginBottom="50dp"
-        android:layout_marginTop="25dp"/>
+        android:layout_marginTop="20dp"/>
 
 </RelativeLayout>

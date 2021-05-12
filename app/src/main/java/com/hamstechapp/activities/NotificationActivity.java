@@ -42,6 +42,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hamstechapp.R;
+import com.hamstechapp.common.CounsellingPopup;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
 import com.hamstechapp.datamodel.AffiliationDataModel;
@@ -68,6 +69,7 @@ public class NotificationActivity extends AppCompatActivity implements BottomNav
     RecyclerView notificationList;
     NotificationListAdapter notificationListAdapter;
     HocLoadingDialog hocLoadingDialog;
+    CounsellingPopup counsellingPopup;
     ArrayList<AffiliationDataModel> arrayData = new ArrayList<>();
     ArrayList<AffiliationDataModel> notificationDetail = new ArrayList<>();
     LogEventsActivity logEventsActivity;
@@ -108,19 +110,26 @@ public class NotificationActivity extends AppCompatActivity implements BottomNav
                 .commit();
 
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
 
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(NotificationActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                PagenameLog = "Counselling";
+                ActivityLog = "Notifications Page";
+                getLogEvent(NotificationActivity.this);
+                Intent intentAbout = new Intent(NotificationActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
         imgSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    PagenameLog = "Search";
+                    ActivityLog = "Notifications Page";
+                    getLogEvent(NotificationActivity.this);
                     txtHeaderTitle.setVisibility(View.GONE);
                     searchParent.setVisibility(View.VISIBLE);
                     searchFragment = SearchFragment.newInstance();
@@ -174,10 +183,16 @@ public class NotificationActivity extends AppCompatActivity implements BottomNav
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
+                PagenameLog = "Home page";
+                ActivityLog = "Notifications Page";
+                getLogEvent(NotificationActivity.this);
                 Intent intentHome = new Intent(NotificationActivity.this, HomeActivity.class);
                 startActivity(intentHome);
                 return true;
             case R.id.navigation_courses:
+                PagenameLog = "Course page";
+                ActivityLog = "Notifications Page";
+                getLogEvent(NotificationActivity.this);
                 Intent intentCourses = new Intent(this, HomeActivity.class);
                 intentCourses.putExtra("isCoursePage","Course");
                 startActivity(intentCourses);
@@ -186,11 +201,17 @@ public class NotificationActivity extends AppCompatActivity implements BottomNav
 
                 return true;
             case R.id.navigation_chat:
+                PagenameLog = "Chat with us";
+                ActivityLog = "Notifications Page";
+                getLogEvent(NotificationActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 return true;
             case R.id.navigation_contact:
+                PagenameLog = "Contact us";
+                ActivityLog = "Notifications Page";
+                getLogEvent(NotificationActivity.this);
                 Intent contactIntent = new Intent(this, ContactUsActivity.class);
                 startActivity(contactIntent);
                 return true;
@@ -470,7 +491,7 @@ public class NotificationActivity extends AppCompatActivity implements BottomNav
             Glide.with(NotificationActivity.this)
                     .asBitmap()
                     .load(notificationDetail.get(itemPosition).getAffiliationImage())
-                    //.placeholder(R.drawable.duser1)
+                    //.fitCenter()
                     .into(UIUtils.getRoundedImageTarget(NotificationActivity.this, imageView, 0));
         }
         txtTitle.setText(notificationDetail.get(itemPosition).getAffiliationTitle());
@@ -498,7 +519,7 @@ public class NotificationActivity extends AppCompatActivity implements BottomNav
             data.put("lesson",lessonLog);
             data.put("activity",ActivityLog);
             data.put("pagename",PagenameLog);
-            boolean logevent = logEventsActivity.LogEventsActivity(context,data);
+            logEventsActivity.LogEventsActivity(context,data);
         } catch (JSONException e) {
             e.printStackTrace();
         }

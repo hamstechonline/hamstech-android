@@ -40,6 +40,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.hamstechapp.R;
 import com.hamstechapp.adapter.WhyHamstechHomeListAdapter;
+import com.hamstechapp.common.CounsellingPopup;
 import com.hamstechapp.common.DeveloperKey;
 import com.hamstechapp.common.HocLoadingDialog;
 import com.hamstechapp.common.LogEventsActivity;
@@ -66,7 +67,7 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
     RecyclerView whyHamstechList;
     ImageView imgBanner,imgDiscover;
     TextView txtHeaderTitle;
-    CheckBox imgSearch;
+    CheckBox imgSearch,overview_more,historyMore;
     RelativeLayout searchParent;
     WhyHamstechHomeListAdapter whyHamstechHomeListAdapter;
     SearchFragment searchFragment;
@@ -77,6 +78,7 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
     private StringBuilder logString;
     private MyPlaybackEventListener playbackEventListener;
     HocLoadingDialog hocLoadingDialog;
+    CounsellingPopup counsellingPopup;
     String mp4URL;
     TextView txtSmallDescription,txtOverviewText,txtOurHistory;
     ArrayList<AffiliationDataModel> arrayData = new ArrayList<>();
@@ -107,6 +109,8 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
         imgSearch = findViewById(R.id.imgSearch);
         txtHeaderTitle = findViewById(R.id.txtHeaderTitle);
         searchParent = findViewById(R.id.searchParent);
+        overview_more = findViewById(R.id.overview_more);
+        historyMore = findViewById(R.id.historyMore);
 
         bottom_navigation.setOnNavigationItemSelectedListener(this);
         bottom_navigation.getMenu().findItem(R.id.navigation_enrol).setChecked(true);
@@ -122,6 +126,7 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
         logString = new StringBuilder();
         playbackEventListener = new MyPlaybackEventListener();
         hocLoadingDialog = new HocLoadingDialog(this);
+        counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
         youtubeFragment.initialize(DeveloperKey.DEVELOPER_KEY,
                 new YouTubePlayer.OnInitializedListener() {
@@ -143,8 +148,8 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent counsellingIntent = new Intent(AboutUsActivity.this, CounsellingActivity.class);
-                startActivity(counsellingIntent);
+                Intent intentAbout = new Intent(AboutUsActivity.this, CounsellingActivity.class);
+                startActivity(intentAbout);
             }
         });
         imgSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -162,6 +167,21 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
                     txtHeaderTitle.setVisibility(View.VISIBLE);
                     searchParent.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        overview_more.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) txtOverviewText.setMaxLines(50);
+                else txtOverviewText.setMaxLines(5);
+            }
+        });
+        historyMore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) txtOurHistory.setMaxLines(50);
+                else txtOurHistory.setMaxLines(5);
             }
         });
 
@@ -199,10 +219,16 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
+                PagenameLog = "Home page";
+                ActivityLog = "About Us Page";
+                getLogEvent(AboutUsActivity.this);
                 Intent intentHome = new Intent(AboutUsActivity.this, HomeActivity.class);
                 startActivity(intentHome);
                 return true;
             case R.id.navigation_courses:
+                PagenameLog = "Course";
+                ActivityLog = "About Us Page";
+                getLogEvent(AboutUsActivity.this);
                 Intent intentCourses = new Intent(this, HomeActivity.class);
                 intentCourses.putExtra("isCoursePage","Course");
                 startActivity(intentCourses);
@@ -211,11 +237,17 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
 
                 return true;
             case R.id.navigation_chat:
+                PagenameLog = "Chat with us";
+                ActivityLog = "About Us Page";
+                getLogEvent(AboutUsActivity.this);
                 Intent myIntent = new Intent(Intent.ACTION_VIEW);
                 myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
                 startActivity(myIntent);
                 return true;
             case R.id.navigation_contact:
+                PagenameLog = "Contact us";
+                ActivityLog = "About Us Page";
+                getLogEvent(AboutUsActivity.this);
                 Intent contactIntent = new Intent(this, ContactUsActivity.class);
                 startActivity(contactIntent);
                 return true;

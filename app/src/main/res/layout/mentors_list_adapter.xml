@@ -46,7 +46,6 @@
 magn alquam erat
 volutpat."
                 android:textColor="@color/gray"
-                android:maxLines="2"
                 android:ellipsize="end"
                 android:fontFamily="@font/circeregular"
                 android:layout_marginTop="10dp"/>
@@ -57,7 +56,8 @@ volutpat."
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_more"
                 android:layout_gravity="end"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="15dp"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
