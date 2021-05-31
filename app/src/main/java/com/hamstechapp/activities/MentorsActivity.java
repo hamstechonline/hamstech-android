@@ -121,6 +121,7 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
         counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
         playerFrameLayout.setVisibility(View.VISIBLE);
+        ActivityLog = "Mentors Page";
         youtubeFragment.initialize(DeveloperKey.DEVELOPER_KEY,
                 new YouTubePlayer.OnInitializedListener() {
                     @Override
@@ -264,7 +265,7 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
     public void ChatUs(View view){
         CourseLog = "";
         PagenameLog = "chat with whatsapp";
-        ActivityLog = "About us Page";
+        ActivityLog = "Mentors Page";
         getLogEvent(MentorsActivity.this);
         Intent myIntent = new Intent(Intent.ACTION_VIEW);
         myIntent.setData(Uri.parse(getResources().getString(R.string.chatURL)));
@@ -277,6 +278,8 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
         public void onPlaying() {
             playbackState = "PLAYING";
             log("\tPLAYING " + getTimesText());
+            PagenameLog = "Video playing";
+            getLogEvent(MentorsActivity.this);
         }
 
         @Override
@@ -295,6 +298,8 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
         public void onPaused() {
             playbackState = "PAUSED";
             log("\tPAUSED " + getTimesText());
+            PagenameLog = "Video paused";
+            getLogEvent(MentorsActivity.this);
         }
 
         @Override
@@ -413,7 +418,7 @@ public class MentorsActivity extends AppCompatActivity implements BottomNavigati
             data.put("lesson","");
             data.put("activity",ActivityLog);
             data.put("pagename",PagenameLog);
-            boolean logevent = logEventsActivity.LogEventsActivity(context,data);
+            logEventsActivity.LogEventsActivity(context,data);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -304,7 +304,7 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
                     courseName = "";
                     lessonLog = "";
                     PagenameLog = counsellingData.get(position).getCounsellingTitle();
-                    ActivityLog = "Counselling Page";
+                    ActivityLog = "Online Counselling Page";
                     getLogEvent(CounsellingActivity.this);
                     mp4URL = counsellingData.get(position).getCounsellingVideo();
                     lessonLog = "";
@@ -318,7 +318,7 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
                 public void onClick(View v) {
                     lessonLog = "";
                     courseName = counsellingData.get(position).getCounsellingTitle();
-                    PagenameLog = "Clicked on mobile number";
+                    PagenameLog = "Call Now";
                     ActivityLog = "Online Counselling Page";
                     getLogEvent(CounsellingActivity.this);
                     Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+getResources().getString(R.string.mobileNumber)));
@@ -390,7 +390,7 @@ public class CounsellingActivity extends AppCompatActivity implements BottomNavi
             playbackState = "STOPPED";
             PagenameLog = "Video stopped";
             ActivityLog = "Online Counselling Page";
-            getLogEvent(CounsellingActivity.this);
+            //getLogEvent(CounsellingActivity.this);
             log("\tSTOPPED");
         }
 

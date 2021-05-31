@@ -353,7 +353,9 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
         @Override
         public void onPlaying() {
             playbackState = "PLAYING";
+            PagenameLog = "Video playing";
             log("\tPLAYING " + getTimesText());
+            getLogEvent(CoursesActivity.this);
         }
 
         @Override
@@ -371,7 +373,9 @@ public class CoursesActivity extends AppCompatActivity implements BottomNavigati
         @Override
         public void onPaused() {
             playbackState = "PAUSED";
+            PagenameLog = "Video paused";
             log("\tPAUSED " + getTimesText());
+            getLogEvent(CoursesActivity.this);
         }
 
         @Override

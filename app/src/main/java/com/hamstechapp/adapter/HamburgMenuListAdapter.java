@@ -141,7 +141,7 @@ public class HamburgMenuListAdapter extends RecyclerView.Adapter<HamburgMenuList
                         Intent intentAbout = new Intent(context, ContactUsActivity.class);
                         context.startActivity(intentAbout);
                     } else if (position == 7){
-                        setLogEvents("RegisterCurses");
+                        setLogEvents("Register Courses");
                         new SocialMediaEventsHelper(context).EventRegisterCourse();
                         holder.linearParent.setBackgroundColor(context.getResources().getColor(R.color.white));
                         holder.listChild.setVisibility(View.GONE);

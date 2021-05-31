@@ -128,6 +128,7 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
         hocLoadingDialog = new HocLoadingDialog(this);
         counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
+        ActivityLog = "About Us Page";
         youtubeFragment.initialize(DeveloperKey.DEVELOPER_KEY,
                 new YouTubePlayer.OnInitializedListener() {
                     @Override
@@ -290,7 +291,9 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
         @Override
         public void onPlaying() {
             playbackState = "PLAYING";
+            PagenameLog = "Video playing";
             log("\tPLAYING " + getTimesText());
+            getLogEvent(AboutUsActivity.this);
         }
 
         @Override
@@ -309,6 +312,8 @@ public class AboutUsActivity extends AppCompatActivity implements BottomNavigati
         public void onPaused() {
             playbackState = "PAUSED";
             log("\tPAUSED " + getTimesText());
+            PagenameLog = "Video paused";
+            getLogEvent(AboutUsActivity.this);
         }
 
         @Override

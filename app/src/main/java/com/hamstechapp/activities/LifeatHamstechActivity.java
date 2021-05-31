@@ -152,7 +152,7 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
         hocLoadingDialog = new HocLoadingDialog(this);
         counsellingPopup = new CounsellingPopup(this);
         logEventsActivity = new LogEventsActivity();
-
+        ActivityLog = "LifeatHamstech Page";
         imgDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -362,6 +362,8 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
         public void onPlaying() {
             playbackState = "PLAYING";
             log("\tPLAYING " + getTimesText());
+            PagenameLog = "Video playing";
+            getLogEvent(LifeatHamstechActivity.this);
         }
 
         @Override
@@ -380,6 +382,8 @@ public class LifeatHamstechActivity extends AppCompatActivity implements BottomN
         public void onPaused() {
             playbackState = "PAUSED";
             log("\tPAUSED " + getTimesText());
+            PagenameLog = "Video paused";
+            getLogEvent(LifeatHamstechActivity.this);
         }
 
         @Override

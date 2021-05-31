@@ -617,6 +617,10 @@ public class RegisterCourseActivity extends AppCompatActivity implements BottomN
                                     .load(childListData.get(position).getCourseImage())
                                     //.placeholder(R.drawable.duser1)
                                     .into(imgSelectedImage);
+                            ActivityLog = "RegisterCourse Page";
+                            lessonLog = childListData.get(position).getCourseName();
+                            PagenameLog = "Course selected";
+                            getLogEvent(context);
                         }
                     });
                     selectedCourseCheckbox.setOnClickListener(new View.OnClickListener() {
